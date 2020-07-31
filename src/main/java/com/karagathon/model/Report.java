@@ -1,48 +1,60 @@
 package com.karagathon.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Length;
+
 @Entity
-@Table
-public class Report {
+@Table(name = "report")
+//@SecondaryTable(name = "media")
+public class Report{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long violatorId;
+	private Long id;
 	private String name;
-	private String vesselId;
-	@Lob
-	private byte[] picture;
-	@Lob
-	private byte[] video;
+	
+	@OneToMany(mappedBy = "report")
+	private List<Media> media;
 	
 	
-	
-	public long getViolatorId() {
-		return violatorId;
-	}
-	
+	@Length(max = Integer.MAX_VALUE)
+	private String description;
+
+
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getVesselId() {
-		return vesselId;
+
+
+	public List<Media> getMedia() {
+		return media;
 	}
-	public void setVesselId(String vesselId) {
-		this.vesselId = vesselId;
+
+
+	public void setMedia(List<Media> media) {
+		this.media = media;
 	}
-	public byte[] getPicture() {
-		return picture;
+
+
+	public String getDescription() {
+		return description;
 	}
-	public void setPicture(byte[] picture) {
-		this.picture = picture;
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
