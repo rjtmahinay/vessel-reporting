@@ -28,6 +28,8 @@ public class VesselReportingController {
 	public String login() {
 		return "login.html";
 	}
+	
+	
 
 	@PostMapping("/upload")
 	@ResponseBody
@@ -35,7 +37,7 @@ public class VesselReportingController {
 
 		List<String> fileWithPath = new ArrayList<>();
 
-		fileHelper.moveUploadedFile(files);
+		// fileHelper.moveUploadedFile(files);
 
 //		return ResponseEntity.status(HttpStatus.OK);
 		return "Upload Video Success";

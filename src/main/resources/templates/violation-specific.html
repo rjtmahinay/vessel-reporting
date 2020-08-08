@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://wwww.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1"/>
+<title>Violation Dashboard</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+<style>
+		.row {
+	  display: flex;
+	  flex-wrap: wrap;
+	  padding: 0 4px;
+	}
+	
+	/* Create four equal columns that sits next to each other */
+	.column {
+	  flex: 25%;
+	  max-width: 25%;
+	  padding: 0 4px;
+	}
+	
+	.column img {
+	  margin-top: 8px;
+	  vertical-align: middle;
+	  width: 100%;
+	}
+	
+	/* Responsive layout - makes a two column-layout instead of four columns */
+	@media screen and (max-width: 800px) {
+	  .column {
+	    flex: 50%;
+	    max-width: 50%;
+	  }
+	}
+	
+	/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+	@media screen and (max-width: 600px) {
+	  .column {
+	    flex: 100%;
+	    max-width: 100%;
+	  }
+	}
+	
+	.pencil-format {
+		font-size: 30px;
+		padding: .15em;
+		color: black;
+	    background: white;
+		cursor: pointer;
+	}
+
+	.fa-pencil-alt:hover {
+		background: black;
+		color: white;
+	}	
+</style>
+
+</head>
+<body>
+
+	
+	
+	<h2>Violation <span th:text="'#' + ${violation.id}"></span></h2>
+	<hr>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8"></div>
+			<div class="col-md-4">
+				<a th:href="@{/edit/violation/{id}(id=${violation.id})}">
+                    <i id="pencil-edit" class="fa fa-pencil-alt pencil-format"></i>
+                </a>
+			</div>
+		</div>
+		<div class="report-fields my-2">
+			<div class="row">
+				<div class="col-md-12">
+					<label><b>Description: </b><span th:text="${violation.description}"></span></label>
+				</div>
+				
+			</div>
+			<div class="row mb-5">
+				<div class="col-md-4">
+					<label><b>Date: </b><span th:text="${violation.dateOfViolation}"></span></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<h5>Violators: </h5><hr>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<ul th:each="violator : ${violation.violators}">
+					<li>
+						<a th:href="@{/violator/{id}(id=${violator.id})}"  th:text="${violator.lastName + ', ' +  violator.firstName}" ></a>
+					</li>
+				</ul>
+			</div>
+			<div class="row mt-5">
+				<div class="col-md-4">
+					<h5>Images/Videos </h5><hr>
+				</div>
+			</div>
+			<div class="row" >
+				<!-- <img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
+				<div class="column" th:each="medium : ${media}">
+      				<img th:src="@{${'/uploads/' + medium.mediaFilePath}}" alt="" width="100" height="150">
+    			</div>
+			</div>
+			
+	<!-- 		<img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
+			
+			
+			
+			
+		</div>
+	
+	</div>
+</body>
+</html>
