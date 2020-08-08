@@ -12,9 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="violator")
@@ -31,7 +32,7 @@ public class Violator {
 	private String lastName;
 	
 	@Column(name="date_of_birth")
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date dateOfBirth;
 	
 	@ManyToMany(fetch=FetchType.LAZY,
@@ -43,6 +44,9 @@ public class Violator {
 			inverseJoinColumns=@JoinColumn(name="violation_id")
 			)
 	private List<Violation> violations;
+	
+	@OneToMany(mappedBy = "violator")
+	private List<Media> media;
 
 	public String getFirstName() {
 		return firstName;
@@ -83,6 +87,21 @@ public class Violator {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public List<Media> getMedia() {
+		return media;
+	}
+
+	public void setMedia(List<Media> media) {
+		this.media = media;
+	}
+
+	@Override
+	public String toString() {
+		return "Violator [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
+				+ dateOfBirth + ", media=" + media + "]";
+	}
+
 	
 	
 	

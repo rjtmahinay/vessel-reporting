@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
+    crossorigin="anonymous">
+    
+    <link th:href="@{/css/image.css}" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap-filestyle.min.js}" ></script>
+	
+	<title>Add Violator</title>
+</head>
+<body>
+	
+	<div class="container">
+
+		<h3 th:if="${update}">Edit Violator</h3>
+		<h3 th:unless="${update}">Add Violator</h3>
+		<hr>
+	
+		<p class="h4 mb-4" th:if="${update}">Edit Violator</p>
+		<p class="h4 mb-4" th:unless="${update}">Add Violator</p>
+
+	
+		<form action="#" th:action="@{/submit-violator}" th:object="${violator}"
+			method="POST" enctype="multipart/form-data">
+	
+			<input type="text" th:field="*{firstName}"
+				class="form-control mb-4 col-4" placeholder="First Name">
+				
+			<input type="text" th:field="*{lastName}"
+			class="form-control mb-4 col-4" placeholder="Last Name">
+			
+ 			<input type="date" th:field="*{dateOfBirth}"
+				class="form-control mb-4 col-4" placeholder="Date of Birth"> 
+				
+			<div class="col-md-8 mb-5">
+				<!-- <input type="file" name="files" multiple >			 -->
+				<input type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
+			</div> 
+			
+			<div th:if="${update}">
+				<h5 >Photo/s</h5>
+				<hr>
+			</div>
+			<div class="row" >
+				<!-- <img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
+				<div class="column" >
+					<div th:id="${'div_medium' + medium.id}" class="img-wrap" th:each="medium : ${media}" >
+						<span class="close">&times;</span>
+      					<img th:src="@{${'/uploads/' + medium.mediaFilePath}}" alt="" data-th-attr="data-id=${medium.id}" width="200" height="200">
+      				</div>
+    			</div>
+			</div>
+			
+			<div class="col-md-8 media-inputs mb-2">
+			</div>
+	
+			<button type="submit" class="btn btn-info col-2" th:if="${update}">Save Changes</button>
+			<button type="submit" class="btn btn-info col-2" th:unless="${update}">Submit</button>
+	
+		</form>
+	
+		<hr>
+	</div>
+	
+	<script type="text/javascript" th:src="@{/js/image.js}" ></script>
+
+</body>
+</html>
