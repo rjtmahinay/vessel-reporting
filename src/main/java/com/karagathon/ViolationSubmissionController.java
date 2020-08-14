@@ -1,9 +1,15 @@
 package com.karagathon;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,12 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.karagathon.aws.service.AWSS3Service;
+import com.karagathon.helper.BucketBeanHelper;
 import com.karagathon.helper.FileHelper;
 import com.karagathon.helper.LabelValueBeanHelper;
 import com.karagathon.helper.ListConversionHelper;
 import com.karagathon.model.Media;
 import com.karagathon.model.Violation;
-import com.karagathon.repository.MediaRepository;
 import com.karagathon.service.MediaService;
 import com.karagathon.service.ViolationService;
 import com.karagathon.service.ViolatorService;
@@ -43,10 +50,19 @@ public class ViolationSubmissionController {
 	@Autowired
 	FileHelper fileHelper;
 	
+	@Autowired
+	AWSS3Service s3Service;
+	
 	@Value("${violation.file.path}")
 	String destination;
 	
-	@RequestMapping("/violation-dashboard")
+	@Value("${aws.s3.violation.filePath}")
+	String filePath;
+	
+	@Value("${aws.s3.violation.bucket}")
+	String bucketName;
+	
+	@RequestMapping("/violations")
 	public String dashboard(Model model) {
 		List<Violation> violations = violationService.getAllViolations();
 		
@@ -64,7 +80,7 @@ public class ViolationSubmissionController {
 			List<Media> media = mediaService.findMediaByViolation(violation);
 			mav.addObject("violation", violation);
 			mav.addObject("media", media);
-			mav.setViewName("violation-specific.html");
+		 	mav.setViewName("violation-specific.html");
 		}else{
 			mav.addObject("error", "error");
 			mav.setViewName("error.html");
@@ -82,6 +98,8 @@ public class ViolationSubmissionController {
 		return "add-violation.html";
 	}
 	
+	
+	
 	@PostMapping("/submit-violation")
 	public String saveViolation(@ModelAttribute("violation") Violation violation, @RequestParam("violator_id[]") List<String> violatorIds, 
 								@RequestParam(value="files", required=false) List<MultipartFile> files, @RequestParam(value="media_id[]", required=false) List<String> removedMediaIds) {
@@ -95,15 +113,24 @@ public class ViolationSubmissionController {
 		System.out.println("saved violation");
 		System.out.println(savedViolation);
 		
-		files.forEach(f -> System.out.println(f.getOriginalFilename()));
-		
-		mediaService.saveAll( ListConversionHelper.stringToMedia( fileHelper.moveUploadedFile(files, destination), savedViolation ) );
-		
+		mediaService.saveAll( ListConversionHelper.stringToMedia( fileHelper.uploadMultipleFiles(files, new BucketBeanHelper(bucketName, filePath) ), savedViolation ) );
 		
 		if( !Objects.isNull(removedMediaIds) && !removedMediaIds.isEmpty() ) {
 			removedMediaIds.forEach( mediumId -> mediaService.deleteMedium( Long.parseLong(mediumId) ) );
 		}
 		return "redirect:/add-violation";
+	}
+	
+
+	@GetMapping("/violation/image/{id}")
+	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
+		response.setContentType("image/jfif"); 
+		Media medium = mediaService.findById(id);
+
+		if( !Objects.isNull(medium) ) {
+			InputStream is = new ByteArrayInputStream( s3Service.downloadFile( medium.getMediaFilePath(), new BucketBeanHelper(bucketName, filePath) ) );
+			IOUtils.copy(is, response.getOutputStream());
+		}
 	}
 	
 	

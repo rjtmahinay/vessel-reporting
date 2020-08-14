@@ -1,9 +1,15 @@
 package com.karagathon;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.karagathon.aws.service.AWSS3Service;
+import com.karagathon.helper.BucketBeanHelper;
 import com.karagathon.helper.FileHelper;
 import com.karagathon.helper.ListConversionHelper;
 import com.karagathon.model.Media;
@@ -38,13 +46,24 @@ public class ViolatorSubmissionController {
 	@Autowired
 	FileHelper fileHelper;
 	
+	@Autowired
+	AWSS3Service s3Service;
+	
 	@Value("${violation.file.path}")
 	String destination;
 	
-	@RequestMapping("/violator-dashboard")
+	@Value("${aws.s3.violator.filePath}")
+	String filePath;
+	
+	@Value("${aws.s3.violation.bucket}")
+	String bucketName;
+	
+	@RequestMapping("/violators")
 	public String dashboard(Model model) {
 		List<Violator> violators = violatorService.getAllViolators();
 		model.addAttribute("violators", violators);
+		
+		violators.forEach(System.out::println);
 		
 		return "violator-dashboard.html";
 	}
@@ -81,13 +100,26 @@ public class ViolatorSubmissionController {
 		
 		Violator savedViolator = violatorService.saveAndFlush(violator);
 		
-		mediaService.saveAll( ListConversionHelper.stringToMedia( fileHelper.moveUploadedFile(files, destination), savedViolator ) );
+		mediaService.saveAll( ListConversionHelper.stringToMedia( fileHelper.uploadMultipleFiles(files, new BucketBeanHelper(bucketName, filePath) ), savedViolator ) );
 		
 		if( !Objects.isNull(removedMediaIds) && !removedMediaIds.isEmpty() ) {	
 			removedMediaIds.forEach( mediumId -> mediaService.deleteMedium( Long.parseLong(mediumId) ) );
 		}
 		
+		System.out.println("new violator: " + savedViolator);
+		
 		return "redirect:/add-violator";
+	}
+	
+	@GetMapping("/violator/image/{id}")
+	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
+		response.setContentType("image/jfif"); 
+		Media medium = mediaService.findById(id);
+
+		if( !Objects.isNull(medium) ) {
+			InputStream is = new ByteArrayInputStream( s3Service.downloadFile( medium.getMediaFilePath(), new BucketBeanHelper(bucketName, filePath) ) );
+			IOUtils.copy(is, response.getOutputStream());
+		}
 	}
 	
 	@GetMapping("/edit/violator/{id}")

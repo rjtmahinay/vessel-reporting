@@ -36,5 +36,9 @@ public class MediaService {
 		mediaRepository.deleteById(id);
 	}
 	
+	public Media findById(Long id) {
+		return mediaRepository.findById(id).orElse(null);
+	}
+	
 
 } 

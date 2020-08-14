@@ -22,6 +22,8 @@
 	<title>Add Violation</title>
 </head>
 <body>
+
+
 	
 	<div class="container">
 
@@ -36,11 +38,17 @@
 			method="POST" enctype="multipart/form-data">
 		
 			<input type="hidden" name="violation_id" th:field="*{id}" /> 
-			<input type="text" th:field="*{description}"
-				class="form-control mb-4 col-4" placeholder="Description">
-				
+			
+			<input type="text" th:field="*{title}"
+				class="form-control mb-4 col-4" placeholder="Title">
+			
+			<textarea class="form-control mb-4 col-6" th:field="*{description}" placeholder="Description" style="height: 300px;"></textarea>
+					
 			<input type="date" th:field="*{dateOfViolation}"
-				class="form-control mb-4 col-4" placeholder="Date of Violation"> 
+				class="form-control mb-4 col-2" placeholder="Date of Violation" > 
+				
+			<input type="text" th:field="*{location}"
+				class="form-control mb-4 col-6" placeholder="Location">
 				
 			<style>
 			  .ui-autocomplete-loading {
@@ -69,7 +77,7 @@
 			</script>
 			
 			
-			<div class="row mb-5">
+			<div class="row mb-4">
 				<div class="col-md-8">
 					<input id="violatorsAC" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="violatorsAC" 
 					placeholder="Violators" value="">
@@ -110,7 +118,7 @@
 				<div class="column" >
 					<div th:id="${'div_medium' + medium.id}" class="img-wrap" th:each="medium : ${media}" >
 						<span class="close">&times;</span>
-      					<img th:src="@{${'/uploads/' + medium.mediaFilePath}}" alt="" data-th-attr="data-id=${medium.id}" width="200" height="200">
+						<img data-th-attr="data-id=${medium.id}" th:src="@{/violation/image/{id}(id=${medium.id})}" width="200" height="200">
       				</div>
     			</div>
 			</div>

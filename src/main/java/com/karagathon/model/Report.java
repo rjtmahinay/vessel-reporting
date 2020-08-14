@@ -19,6 +19,7 @@ public class Report{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name;
 	
 	@OneToMany(mappedBy = "report")
@@ -27,7 +28,16 @@ public class Report{
 	
 	@Length(max = Integer.MAX_VALUE)
 	private String description;
-
+	
+	
+	public Report() {}
+	
+	public Report(Long id, String name, List<Media> media, @Length(max = 2147483647) String description) {
+		this.id = id;
+		this.name = name;
+		this.media = media;
+		this.description = description;
+	}
 
 	public String getName() {
 		return name;
@@ -56,5 +66,13 @@ public class Report{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
