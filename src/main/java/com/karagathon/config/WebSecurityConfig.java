@@ -14,13 +14,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		 http.csrf().disable();
 		 http.headers().frameOptions().disable();
+//         http.authorizeRequests()
 //         .antMatchers("*/upload/**").permitAll()
-//         .antMatchers("**/").permitAll()
-//         .anyRequest().authenticated();
+//         .antMatchers("**/").permitAll()         
+//         .anyRequest().authenticated()
 //         .and().logout().logoutUrl("/logout").permitAll()
 //         .and()
 //         .formLogin().loginPage("/").permitAll();
+         
 	}
-	
-	
 }

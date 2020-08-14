@@ -2,6 +2,8 @@ package com.karagathon.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,7 @@ public class ViolatorService {
 	@Autowired  
 	private ViolatorRepository violatorRepository;  
 	
-	
-	@Cacheable("getAllViolators")
-	public List<Violator> getAllViolators() {
+	public List<Violator> getAllViolators() {	
 		return violatorRepository.findAll();
 	}
 	

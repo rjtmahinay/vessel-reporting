@@ -15,7 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name="violation")
@@ -24,7 +26,14 @@ public class Violation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Length(max = 100)
+	private String title;
+	
+	@Length(max = Integer.MAX_VALUE)
 	private String description;
+	
+	@Length(max = 1000)
+	private String location;
 	
 	@Column(name="date_of_violation")
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -42,6 +51,14 @@ public class Violation {
 	
 	@OneToMany(mappedBy = "violation")
 	private List<Media> media;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public String getDescription() {
 		return description;
@@ -83,12 +100,20 @@ public class Violation {
 		this.dateOfViolation = dateOfViolation;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
-		return "Violation [id=" + id + ", description=" + description + ", dateOfViolation=" + dateOfViolation
-				+ ", violators=" + violators + ", media=" + media + "]";
+		return "Violation [id=" + id + ", title=" + title + ", description=" + description + ", location=" + location
+				+ ", dateOfViolation=" + dateOfViolation + ", violators=" + violators + ", media=" + media + "]";
 	}
-	
+
 	
 	
 	
