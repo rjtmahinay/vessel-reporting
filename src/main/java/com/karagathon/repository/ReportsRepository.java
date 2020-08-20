@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.karagathon.model.Report;
+import com.karagathon.model.Violation;
 
 @Repository
 public interface ReportsRepository extends JpaRepository<Report, Long>{
@@ -23,4 +24,8 @@ public interface ReportsRepository extends JpaRepository<Report, Long>{
 	@Query(value = "INSERT INTO Report (picture) VALUES (:uploadedPicture)", nativeQuery = true)
 	@Transactional
 	void uploadImage(@Param("uploadedPicture") byte[] picture);
+	
+	
+	@Query("SELECT v FROM Report v where v.description LIKE CONCAT('%',:description,'%')")    
+    List<Report> searchReportByDescription(@Param("description") String description);
 } 
