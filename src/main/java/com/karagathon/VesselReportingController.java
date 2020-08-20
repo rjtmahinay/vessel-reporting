@@ -118,7 +118,6 @@ public class VesselReportingController {
 	@ResponseBody
 	public String upload(@RequestBody String jsonData) throws IOException {
 		JsonParser jsonParser = JsonParserFactory.getJsonParser();
-
 		Map<String, Object> parsedJsonMap = jsonParser.parseMap(jsonData);
 		final String locationString = parsedJsonMap.get("location").toString().trim();
 		Report savedReport = reportService.saveAndFlushReport(
