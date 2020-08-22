@@ -37,10 +37,12 @@ import com.karagathon.helper.LocationParser;
 import com.karagathon.helper.SpecificServiceHelper;
 import com.karagathon.model.Location;
 import com.karagathon.model.Media;
+import com.karagathon.model.Notification;
 import com.karagathon.model.Report;
 import com.karagathon.model.Violator;
 import com.karagathon.service.LocationService;
 import com.karagathon.service.MediaService;
+import com.karagathon.service.NotificationService;
 import com.karagathon.service.ReportService;
 
 @Controller
@@ -54,6 +56,9 @@ public class VesselReportingController {
 
 	@Autowired
 	AWSS3Service s3Service;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	@Value("${aws.s3.report.filePath}")
 	String filePath;
@@ -144,6 +149,14 @@ public class VesselReportingController {
 //			
 //			System.out.println(updatedSavedLocation);
 //		}
+		
+		Notification savedNotification = notificationService.saveAndFlush( 
+					new Notification( false, "New Report Reported! Report #" + savedReport.getId().toString(), 
+											savedReport.getDescription(), 
+											"/report/".concat(savedReport.getId().toString()) ) );
+		System.out.println(savedNotification);
+		
+		// add sms logic
 		
 		return "Upload Video Success";
 	}
