@@ -34,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.karagathon.aws.service.AWSS3Service;
 import com.karagathon.helper.BucketBeanHelper;
@@ -95,8 +93,23 @@ public class VesselReportingController {
 	LocationService locationService;
 	
 	@Autowired
-	ReportService reportService;
 
+	AWSS3Service s3Service;
+	
+	@Autowired
+	NotificationService notificationService;
+
+	@Value("${aws.s3.report.filePath}")
+	String filePath;
+
+	@Value("${aws.s3.report.bucket}")
+	String bucketName;
+
+	@Value("${mobile.android.date.format}")
+	String dateFormatFromMobile;
+
+	@Autowired
+	ReportService reportService;
 
 	@RequestMapping("/")
 	public String login() {
