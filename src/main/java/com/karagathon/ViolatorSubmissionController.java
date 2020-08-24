@@ -79,7 +79,8 @@ public class ViolatorSubmissionController {
 	
 	@GetMapping("/search-violator")
 	public ModelAndView searchViolator( @RequestParam("keyword") String name ) {
-		if( Objects.isNull(name) || name.isEmpty() || name.isBlank()) {
+
+		if( Objects.isNull(name) || name.trim().isEmpty()) {
 			return new ModelAndView( "redirect:/violators" );
 		}
 		

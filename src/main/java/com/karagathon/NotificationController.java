@@ -33,7 +33,7 @@ public class NotificationController {
 		System.out.println(notifications);
 		
 		final StringBuffer output = new StringBuffer();
-		if( Objects.isNull(search) || search.isEmpty() || search.isBlank() ) {	
+		if( Objects.isNull(search) || search.trim().isEmpty() ) {	
 			if( !notifications.isEmpty() ) {
 				notifications.forEach(notification -> {
 					output.append( "<li><a class=\"stretched-link\" href='" )
@@ -55,26 +55,7 @@ public class NotificationController {
 		}
 		
 		System.out.println( "output: " + output );
-		
-
-        //If error, just return a 400 bad request, along with the error message
-//        if (errors.hasErrors()) {
-//
-//            result.setMsg(errors.getAllErrors()
-//                        .stream().map(x -> x.getDefaultMessage())
-//                        .collect(Collectors.joining(",")));
-//
-//            return ResponseEntity.badRequest().body(result);
-//
-//        }
-
-//        List<User> users = userService.findByUserNameOrEmail(search.getUsername());
-//        if (users.isEmpty()) {
-//            result.setMsg("no user found!");
-//        } else {
-//            result.setMsg("success");
-//        }
-//        result.setResult(users);
+	
 
         return ResponseEntity.ok( output.toString() );
 

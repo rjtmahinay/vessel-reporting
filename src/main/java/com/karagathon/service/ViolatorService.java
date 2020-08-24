@@ -49,7 +49,7 @@ public class ViolatorService implements ApplicationService{
 	}
 	
 	public List<Violator> findViolatorsByName( String name ) {
-		if( Objects.isNull(name) || name.isEmpty() || name.isBlank() ) {
+		if( Objects.isNull(name) || name.trim().isEmpty() ) {
 			return violatorRepository.findAll();
 		}
 		

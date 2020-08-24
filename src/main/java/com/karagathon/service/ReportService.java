@@ -32,7 +32,7 @@ public class ReportService implements ApplicationService {
 	}
 	
 	public List<Report> findReportsByDescription(final String description) {
-		if( Objects.isNull(description) || description.isEmpty() || description.isBlank()) {
+		if( Objects.isNull(description) || description.trim().isEmpty()) {
 			return reportsRepository.findAll();
 		}
 		

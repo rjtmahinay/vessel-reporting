@@ -143,7 +143,9 @@ public class VesselController {
 	
 	@GetMapping("/search-vessel")
 	public ModelAndView searchVessel( @RequestParam("keyword") String name ) {
-		if( Objects.isNull(name) || name.isEmpty() || name.isBlank()) {
+
+		if( Objects.isNull(name) || name.trim().isEmpty()) {
+
 			return new ModelAndView( "redirect:/vessels" );
 		}
 		

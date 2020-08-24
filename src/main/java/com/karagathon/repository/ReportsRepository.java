@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.karagathon.helper.ModelStatistics;
 import com.karagathon.model.Report;
 import com.karagathon.model.Violation;
 
@@ -28,4 +29,7 @@ public interface ReportsRepository extends JpaRepository<Report, Long>{
 	
 	@Query("SELECT v FROM Report v where v.description LIKE CONCAT('%',:description,'%')")    
     List<Report> searchReportByDescription(@Param("description") String description);
+	
+	@Query("Select new com.karagathon.helper.ModelStatistics(MONTH(v.dateOfReport) as month, Count(v.dateOfReport) as value) from Report v GROUP by MONTH(v.dateOfReport)")
+	List<ModelStatistics> getMonthStatisticsFromReport();
 } 
