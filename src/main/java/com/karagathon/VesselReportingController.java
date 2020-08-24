@@ -200,7 +200,7 @@ public class VesselReportingController {
 	
 	@GetMapping("/search-report")
 	public ModelAndView searchViolator( @RequestParam("keyword") String description ) {
-		if( Objects.isNull(description) || description.isEmpty() || description.isBlank()) {
+		if( Objects.isNull(description) || description.trim().isEmpty() ) {
 			return new ModelAndView( "redirect:/reports" );
 		}
 		

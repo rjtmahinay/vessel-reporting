@@ -37,7 +37,7 @@ public class VesselService implements ApplicationService {
 	}
 	
 	public List<Vessel> findVesselByName( final String name ) {
-		if(Objects.isNull(name) || name.isEmpty() || name.isBlank()) {
+		if(Objects.isNull(name) || name.trim().isEmpty()) {
 			return vesselRepository.findAll();
 		}
 		
