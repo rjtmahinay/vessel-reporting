@@ -45,8 +45,6 @@ public class Report implements IModel{
 	@Length(max = Integer.MAX_VALUE)
 	@Column(length=Integer.MAX_VALUE)
 	private String description;
-	
-
 
 	public Report(String name, @Length(max = 1000) String location, Date dateOfReport,
 			@Length(max = 2147483647) String description) {
@@ -56,7 +54,6 @@ public class Report implements IModel{
 		this.dateOfReport = dateOfReport;
 		this.description = description;
 	}
-	
 
 	public Report() {}
 	
