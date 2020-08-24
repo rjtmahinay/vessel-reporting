@@ -2,7 +2,7 @@
 <html xmlns:th="http://wwww.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1"/>
-<title>Report</title>
+<title>Vessel Page</title>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -62,52 +62,55 @@
 
 	
 	
-	<h2>Report <span th:text="'#' + ${report.id}"></span></h2>
+	<h2>Vessel <span th:text="'#' + ${vessel.id}"></span></h2>
 	<hr>
 	<div class="container">
+		<div class="row">
+			<div class="col-md-8"></div>
+			<div class="col-md-4">
+				<a th:href="@{/edit/vessel/{id}(id=${vessel.id})}">
+                    <i id="pencil-edit" class="fa fa-pencil-alt pencil-format"></i>
+                </a>
+			</div>
+		</div>
 		<div class="report-fields my-2">
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Reported by: </b><span th:text="${report.name}"></span></label>
+				<div class="col-md-8">
+					<label><b>Vessel Name: </b><span th:text="${vessel.vesselName}"></span></label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<label><b>Date: </b><span th:text="${report.dateOfReport}"></span></label>
+					<label><b>License Id: </b><span th:text="${vessel.licenseId}"></span></label>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Description: </b><span th:text="${report.description}"></span></label>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<label><b>Location: </b><span th:text="${report.location}"></span></label>
-				</div>
-			</div>
-			<!-- <div class="row mb-5">
 				<div class="col-md-4">
-					<label><b>Date: </b><span th:text="${violation.dateOfViolation}"></span></label>
+					<label><b>License Expiry Date: </b><span th:text="${vessel.licenseExpiry}"></span></label>
 				</div>
-			</div> -->
+			</div>
+			
+			<div class="row mb-4">
+				<div class="col-md-8">
+					<label><b>License Type: </b><span th:text="${vessel.licenseType}"></span></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<label><b>Owner: </b><a th:href="@{/violator/{id}(id=${vessel.violator.id})}"  th:text="${vessel.violator.lastName + ', ' +  vessel.violator.firstName}" ></a></label>
+				</div>
+			</div>
 			<div class="row mt-5">
 				<div class="col-md-4">
-					<h5>Images/Videos </h5><hr>
+					<h5>Images </h5><hr>
 				</div>
 			</div>
 			<div class="row" >
 				<!-- <img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
 				<div class="column" th:each="medium : ${media}">
-<!--       				<img th:src="@{${'/uploads/' + medium.mediaFilePath}}" alt="" width="100" height="150" > -->
-      				<img class="" th:src="@{/report/image/{id}(id=${medium.id})}" width="100" height="200">
+      				<img class="" th:src="@{/vessel/image/{id}(id=${medium.id})}" width="100" height="200">
     			</div>
 			</div>
-			
-	<!-- 		<img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
-			
-			
-			
 			
 		</div>
 	

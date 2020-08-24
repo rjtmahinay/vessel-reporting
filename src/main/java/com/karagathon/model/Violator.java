@@ -19,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="violator")
-public class Violator {
+public class Violator implements IModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,16 @@ public class Violator {
 	@Column(name="date_of_birth")
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date dateOfBirth;
+	
+	@OneToMany(mappedBy = "violator")
+	private List<Vessel> vessels;
+	
+	private Double height;
+	
+	private Double weight;
+	
+	private String contactNumber;
+	
 	
 	@ManyToMany(fetch=FetchType.LAZY,
 			cascade= {CascadeType.PERSIST, CascadeType.MERGE,
@@ -96,14 +106,42 @@ public class Violator {
 		this.media = media;
 	}
 
+	public List<Vessel> getVessels() {
+		return vessels;
+	}
+
+	public void setVessels(List<Vessel> vessels) {
+		this.vessels = vessels;
+	}
+
+	public Double getHeight() {
+		return height;
+	}
+
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+
+	public Double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
 	@Override
 	public String toString() {
 		return "Violator [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth="
 				+ dateOfBirth + ", media=" + media + "]";
 	}
 
-	
-	
-	
-	
 }

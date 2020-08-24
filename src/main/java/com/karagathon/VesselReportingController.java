@@ -52,7 +52,6 @@ import com.karagathon.model.Violator;
 import com.karagathon.service.LocationService;
 import com.karagathon.service.MediaService;
 import com.karagathon.service.NotificationService;
-=======
 import com.karagathon.aws.service.AWSS3Service;
 import com.karagathon.helper.BucketBeanHelper;
 import com.karagathon.helper.FileHelper;
@@ -81,31 +80,21 @@ public class VesselReportingController {
 	@Value("${aws.s3.report.bucket}")
 	String bucketName;
 	
-	@Autowired
-
-	AWSS3Service s3Service;
 	
 	@Autowired
 	NotificationService notificationService;
 
-	@Value("${aws.s3.report.filePath}")
-	String filePath;
-
-	@Value("${aws.s3.report.bucket}")
-	String bucketName;
 
 	@Value("${mobile.android.date.format}")
 	String dateFormatFromMobile;
-
-	@Autowired
-	ReportService reportService;
 
 	@Autowired
 	SpecificServiceHelper serviceHelper;
 	
 	@Autowired
 	LocationService locationService;
-
+	
+	@Autowired
 	ReportService reportService;
 
 
@@ -114,42 +103,6 @@ public class VesselReportingController {
 		return "login.html";
 	}
 
-
-	@RequestMapping("/reports")
-	public String reportsDashboard(Model model) {
-		List<Report> reports = reportService.getAllReports();
-		reports.forEach(report -> {
-			String description = report.getDescription();
-
-			if (!Objects.isNull(description) && description.length() > 100) {
-				description = description.substring(0, 100);
-				report.setDescription(description.concat("...."));
-			}
-		});
-
-		reports.forEach(System.out::println);
-
-		model.addAttribute("reports", reports);
-
-		return "reports-dashboard.html";
-	}
-
-	@GetMapping("/report/image/{id}")
-	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
-		response.setContentType("image/jfif");
-		Media medium = mediaService.findById(id);
-
-		if (!Objects.isNull(medium)) {
-			try {
-				InputStream is = new ByteArrayInputStream(
-						s3Service.downloadFile(medium.getMediaFilePath(), new BucketBeanHelper(bucketName, filePath)));
-				IOUtils.copy(is, response.getOutputStream());
-			} catch (AmazonS3Exception as3e) {
-				System.out.println(as3e.getErrorMessage());
-			}
-
-=======
-	
 	@RequestMapping("/reports")
 	public String reportsDashboard(Model model) {
 		List<Report> reports = reportService.getAllReports().stream()

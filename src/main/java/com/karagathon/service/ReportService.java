@@ -15,9 +15,6 @@ import com.karagathon.repository.ReportsRepository;
 
 public class ReportService implements ApplicationService {
 
-public class ReportService {
-
-	
 	@Autowired
 	ReportsRepository reportsRepository;
 	

@@ -23,8 +23,6 @@
 </head>
 <body>
 
-
-	
 	<div class="container">
 
 		<h3 th:if="${update}">Edit Violation</h3>
@@ -59,6 +57,7 @@
 			<script type="text/javascript">
 				var listOfIds = [];
 				var violatorId = '';
+				var vesselId = '';
 				$(function() {
 					$("#violatorsAC").autocomplete({
 						source: "/violatorsAutoComplete", 
@@ -74,6 +73,19 @@
 					});
 		
 				});
+				
+				$(function() {
+					$("#vesselsAC").autocomplete({
+						source: "/vesselsAutoComplete", 
+						minLength: 1,
+						select: function(event, ui) {
+							this.value = ui.item.value;
+							vesselId = ui.item.id;
+							return false;
+						}
+					});
+		
+				});
 			</script>
 			
 			
@@ -83,7 +95,17 @@
 					placeholder="Violators" value="">
 				</div>
 				<div class="col-md-4">
-					<button type="button" class="btn btn-primary btn-add">Add</button>
+					<button type="button" class="btn btn-primary btn-add-violator">Add</button>
+				</div>	
+			</div>
+			
+			<div class="row mb-4">
+				<div class="col-md-8">
+					<input id="vesselsAC" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="vesselsAC" 
+					placeholder="Vessels" value="">
+				</div>
+				<div class="col-md-4">
+					<button type="button" class="btn btn-primary btn-add-vessel">Add</button>
 				</div>	
 			</div>
 			
@@ -98,6 +120,23 @@
 		            <tbody class="violator-tbody-names">
 		            	<tr th:each="violator: ${violation.violators}">
 						    <td th:text="${violator.lastName + ', ' + violator.firstName}" />
+						    <td><i class="fas fa-minus"></i></td>
+						</tr>
+		            </tbody>
+	        	</table>
+			</div>
+			
+			<div class="col-md-12" style="margin-bottom: 2em;">
+				<table width="50%">
+		            <thead>
+		                <tr>
+		                    <th>Vessel/s</th>
+		                    <th></th>
+		                </tr>
+		            </thead>
+		            <tbody class="vessel-tbody-names">
+		            	<tr th:each="vessel: ${violation.vessels}">
+						    <td th:text="${vessel.vesselName}" />
 						    <td><i class="fas fa-minus"></i></td>
 						</tr>
 		            </tbody>
@@ -131,6 +170,12 @@
 				</div>
 			</div>
 			
+			<div class="col-md-8 vessel-inputs mb-2">
+				<div th:each="vessel: ${violation.vessels}">
+					<input type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" th:value="${vessel.id}">
+				</div>
+			</div>
+			
 			<div class="col-md-8 media-inputs mb-2">
 			</div>
 			
@@ -142,7 +187,7 @@
 		<hr>
 		
 		<script>
-			$( ".btn-add" ).click(function() {
+			$( ".btn-add-violator" ).click(function() {
 				var violatorName = $("#violatorsAC").val();
 				if(violatorName) {
 					
@@ -154,8 +199,20 @@
 					$("#violatorsAC").val('');
 					violatorId = '';
 				}
-				
-			  	
+			});
+			
+			$( ".btn-add-vessel" ).click(function() {
+				var vesselName = $("#vesselsAC").val();
+				if(vesselName) {
+					
+					var name = '<tr><td>' + vesselName + '</td><td><i class="fas fa-minus"></i></td></tr>';
+					$(".vessel-tbody-names").append(name);
+					$('.vessel-inputs').append('<div><input type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" value="' + vesselId +'"></div>');
+					
+					// cleanup
+					$("#vesselssAC").val('');
+					vesselId = '';
+				}
 			});
 
 		</script>

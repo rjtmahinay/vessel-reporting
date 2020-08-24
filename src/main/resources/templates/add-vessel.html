@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
     crossorigin="anonymous">
+	<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
     
     <link th:href="@{/css/image.css}" rel="stylesheet" />
     
@@ -17,48 +18,52 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap-filestyle.min.js}" ></script>
 	
-	<title>Add Violator</title>
-</head>
-<body>
 	
+	<title>Add Vessel</title>
+</head>
+<body>	
 	<div class="container">
 
-		<h3 th:if="${update}">Edit Violator</h3>
-		<h3 th:unless="${update}">Add Violator</h3>
+		<h3 th:if="${update}">Edit Vessel</h3>
+		<h3 th:unless="${update}">Add Vessel</h3>
 		<hr>
 	
-		<p class="h4 mb-4" th:if="${update}">Edit Violator</p>
-		<p class="h4 mb-4" th:unless="${update}">Add Violator</p>
-
+		<p class="h4 mb-4" th:if="${update}">Edit Vessel</p>
+		<p class="h4 mb-4" th:unless="${update}">Add Vessel</p>
 	
-		<form action="#" th:action="@{/submit-violator}" th:object="${violator}"
+		<form action="#" th:action="@{/submit-vessel}" th:object="${vessel}"
 			method="POST" enctype="multipart/form-data">
-	
-			<input type="text" th:field="*{firstName}"
-				class="form-control mb-4 col-4" placeholder="First Name">
-				
-			<input type="text" th:field="*{lastName}"
-			class="form-control mb-4 col-4" placeholder="Last Name">
+		
+			<input type="hidden" name="vessel_id" th:field="*{id}" /> 
 			
- 			<input type="date" th:field="*{dateOfBirth}"
-				class="form-control mb-4 col-4" placeholder="Date of Birth"> 
+			<input type="text" th:field="*{vesselName}"
+				class="form-control mb-4 col-4" placeholder="Vessel Name">
 				
-			<input type="text" th:field="*{height}"
-				class="form-control mb-4 col-4" placeholder="Height in cm"> 
+			<input type="text" th:field="*{licenseId}"
+				class="form-control mb-4 col-4" placeholder="License Id">
+			
+			<!-- <textarea class="form-control mb-4 col-6" th:field="*{description}" placeholder="Description" style="height: 300px;"></textarea> -->
+					
+			<input type="date" th:field="*{licenseExpiry}"
+				class="form-control mb-4 col-2" placeholder="License Expiry Date" > 
 				
-			<input type="text" th:field="*{weight}"
-				class="form-control mb-4 col-4" placeholder="Weight in kg"> 
+			<input type="text" th:field="*{licenseType}"
+				class="form-control mb-4 col-6" placeholder="License Type">
 				
-			<input type="text" th:field="*{contactNumber}"
-				class="form-control mb-4 col-4" placeholder="Contact Number"> 
-
-			<div class="col-md-8 mb-5">
+			  <select  class="form-control mb-4 col-6" required="required"  name="owner" id="owner">
+			  	<option value="none" th:selected="${update != false} ">None</option>
+			      <option th:each="currentOwner : ${owners}" th:value="${currentOwner.id}" th:text="${currentOwner.lastName + ', ' + currentOwner.firstName}" 
+			      			th:selected="${currentOwner.id == vessel.violator?.id}" >
+			      </option>
+		    	</select>
+			
+			 <div class="col-md-8 mb-5">
 				<!-- <input type="file" name="files" multiple >			 -->
 				<input type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
 			</div> 
 			
 			<div th:if="${update}">
-				<h5 >Photo/s</h5>
+				<h5 >Images</h5>
 				<hr>
 			</div>
 			<div class="row" >
@@ -66,23 +71,26 @@
 				<div class="column" >
 					<div th:id="${'div_medium' + medium.id}" class="img-wrap" th:each="medium : ${media}" >
 						<span class="close">&times;</span>
-      					<img data-th-attr="data-id=${medium.id}" th:src="@{/violator/image/{id}(id=${medium.id})}" width="200" height="200">
+						<img data-th-attr="data-id=${medium.id}" th:src="@{/vessel/image/{id}(id=${medium.id})}" width="200" height="200">
       				</div>
     			</div>
 			</div>
+
+			<br>
+			
 			
 			<div class="col-md-8 media-inputs mb-2">
 			</div>
-	
+			
 			<button type="submit" class="btn btn-info col-2" th:if="${update}">Save Changes</button>
 			<button type="submit" class="btn btn-info col-2" th:unless="${update}">Submit</button>
 	
 		</form>
 	
 		<hr>
+		
+		<script type="text/javascript" th:src="@{/js/image.js}" ></script>
 	</div>
-	
-	<script type="text/javascript" th:src="@{/js/image.js}" ></script>
 
 </body>
 </html>

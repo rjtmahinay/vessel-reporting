@@ -47,7 +47,6 @@ public class Report implements IModel{
 	private String description;
 	
 
-	public Report() {}
 
 	public Report(String name, @Length(max = 1000) String location, Date dateOfReport,
 			@Length(max = 2147483647) String description) {
@@ -58,9 +57,6 @@ public class Report implements IModel{
 		this.description = description;
 	}
 	
-	public Report( Long id, String name, List<Media> media, String description ) {
-		
-	}
 
 	public Report() {}
 	

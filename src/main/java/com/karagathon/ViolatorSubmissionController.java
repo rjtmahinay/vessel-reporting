@@ -3,7 +3,8 @@ package com.karagathon;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,11 +28,13 @@ import com.karagathon.aws.service.AWSS3Service;
 import com.karagathon.helper.BucketBeanHelper;
 import com.karagathon.helper.FileHelper;
 import com.karagathon.helper.ListConversionHelper;
+import com.karagathon.helper.SpecificServiceHelper;
+import com.karagathon.helper.Utilities;
 import com.karagathon.model.Media;
-import com.karagathon.model.Violation;
+import com.karagathon.model.Vessel;
 import com.karagathon.model.Violator;
 import com.karagathon.service.MediaService;
-import com.karagathon.service.ViolationService;
+import com.karagathon.service.VesselService;
 import com.karagathon.service.ViolatorService;
 
 @Controller
@@ -48,6 +51,12 @@ public class ViolatorSubmissionController {
 	
 	@Autowired
 	AWSS3Service s3Service;
+	
+	@Autowired
+	VesselService vesselService;
+	
+	@Autowired
+	SpecificServiceHelper serviceHelper;
 	
 	@Value("${violation.file.path}")
 	String destination;
@@ -68,6 +77,21 @@ public class ViolatorSubmissionController {
 		return "violator-dashboard.html";
 	}
 	
+	@GetMapping("/search-violator")
+	public ModelAndView searchViolator( @RequestParam("keyword") String name ) {
+		if( Objects.isNull(name) || name.isEmpty() || name.isBlank()) {
+			return new ModelAndView( "redirect:/violators" );
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		List<Violator> violators = violatorService.findViolatorsByName(name);
+		mav.addObject("keyword", name);
+		mav.addObject("violators", violators);
+		mav.setViewName("violator-dashboard.html");
+		
+		return mav;
+	}
+	
 	@RequestMapping("/add-violator")
 	public String addViolator(Model model) {
 		
@@ -78,19 +102,18 @@ public class ViolatorSubmissionController {
 	
 	@GetMapping("/violator/{id}")
 	public ModelAndView getSpecificViolator(@PathVariable("id") Long id) {
-		ModelAndView mav = new ModelAndView();
-		Violator violator = violatorService.findById(id);
 		
-		if(!Objects.isNull(violator)) {
-			List<Media> media = mediaService.findMediaByViolator(violator);
-			mav.addObject("violator", violator);
-			mav.addObject("media", media);
-			mav.setViewName("violator-specific.html");
-		}else{
-			mav.addObject("error", "error");
-			mav.setViewName("error.html");
+		List<Vessel> vesselsOwned = vesselService.findVesselsOwnedByViolator(violatorService.findById(id));
+		ModelAndView mav = serviceHelper.getSpecific(violatorService, id);
+		Violator violator = violatorService.findById(id);
+		boolean isOwner = false;
+		if( !vesselsOwned.isEmpty() ) {
+			isOwner = true;
+			mav.addObject("vessels", vesselsOwned);
 		}
 		
+		mav.addObject("isOwner", isOwner);
+		mav.addObject("age", Utilities.calculateAge(violator.getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()));
 		return mav;
 	}
 	
@@ -132,6 +155,7 @@ public class ViolatorSubmissionController {
 		model.addAttribute("update", true);
 		return "add-violator.html";
 	}
+
 	
 //	@PostMapping("/add-violator")
 //	@ResponseBody
