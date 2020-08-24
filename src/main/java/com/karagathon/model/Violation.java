@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name="violation")
-public class Violation {
+public class Violation implements IModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -48,6 +48,16 @@ public class Violation {
 			inverseJoinColumns=@JoinColumn(name="violator_id")
 			)
 	private List<Violator> violators;
+	
+	@ManyToMany(fetch=FetchType.LAZY,
+			cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			 CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinTable(
+			name="violation_vessel",
+			joinColumns=@JoinColumn(name="violation_id"),
+			inverseJoinColumns=@JoinColumn(name="vessel_id")
+			)
+	private List<Vessel> vessels;
 	
 	@OneToMany(mappedBy = "violation")
 	private List<Media> media;
@@ -108,13 +118,21 @@ public class Violation {
 		this.location = location;
 	}
 
+	public List<Vessel> getVessels() {
+		return vessels;
+	}
+
+	public void setVessels(List<Vessel> vessels) {
+		this.vessels = vessels;
+	}
+
 	@Override
 	public String toString() {
 		return "Violation [id=" + id + ", title=" + title + ", description=" + description + ", location=" + location
-				+ ", dateOfViolation=" + dateOfViolation + ", violators=" + violators + ", media=" + media + "]";
+				+ ", dateOfViolation=" + dateOfViolation + ", violators=" + violators + ", vessels=" + vessels
+				+ ", media=" + media + "]";
 	}
 
 	
-	
-	
+
 }

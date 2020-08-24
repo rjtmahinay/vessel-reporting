@@ -7,12 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "media")
-public class Media {
+public class Media implements IModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,7 @@ public class Media {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "report_id")
+	@JsonBackReference
 	private Report report;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -29,6 +31,10 @@ public class Media {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "violator_id")
 	private Violator violator;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "vessel_id")
+	private Vessel vessel;
 	
 	private String mediaFilePath;
 	
@@ -46,6 +52,26 @@ public class Media {
 	public Media(String mediaFilePath, Violator violator) {
 		setMediaFilePath(mediaFilePath);
 		setViolator(violator);
+	}
+	
+	public Media(String mediaFilePath, Report report) {
+		setMediaFilePath(mediaFilePath);
+		setReport(report);
+	}
+	
+	public Media(String mediaFilePath, IModel model) {
+		setMediaFilePath(mediaFilePath);
+		
+		if( model instanceof Violator ) {
+			setViolator((Violator)model);
+		}else if( model instanceof Violation ) {
+			setViolation((Violation)model);
+		}else if( model instanceof Report ) {
+			setReport((Report)model);
+		}else {
+			setVessel((Vessel)model );
+		}
+	
 	}
 
 	public String getMediaFilePath() {
@@ -78,6 +104,22 @@ public class Media {
 
 	public void setViolator(Violator violator) {
 		this.violator = violator;
+	}
+
+	public Report getReport() {
+		return report;
+	}
+
+	public void setReport(Report report) {
+		this.report = report;
+	}
+
+	public Vessel getVessel() {
+		return vessel;
+	}
+
+	public void setVessel(Vessel vessel) {
+		this.vessel = vessel;
 	}
 	
 	

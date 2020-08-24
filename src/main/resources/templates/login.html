@@ -1,10 +1,202 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
+   crossorigin="anonymous">
+	<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+   
+   <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
+   <link th:href="@{/css/style3.css}" rel="stylesheet" />
+   
+   	
+   	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   	
+   	<!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    
+    <script type="text/javascript" th:src="@{/js/highcharts/highcharts.js}" ></script>
+    
+    
+<title>Login</title>
 </head>
 <body>
 
+	<nav id="sidebar">
+        <div id="dismiss">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+
+        <div class="sidebar-header">
+            <br>
+            <h6>Gongogogona</h6>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+            </li>
+            <li >
+                <a href="/reports">Reports</a>
+            </li>
+            <li>
+                <a href="/violations">Violations</a>
+            </li>
+            <li>
+                <a href="/violators">Violators</a>
+            </li>
+            <li>
+                <a href="/vessels">Vessels</a>
+            </li>
+            <li>
+                <a href="/map">Map</a>
+            </li>
+            <li>
+                <a href="/logout">Log Out</a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="content">
+        <nav class="navbar">
+            <div class="">
+                <button type="button" id="sidebarCollapse" style="background-color: #fffff;" class="btn btn-info">
+                    <i class="fas fa-align-justify"></i>
+                    <span></span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                							aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+
+            </div>
+
+            <div class="col-md-8" >
+                <font color="white">
+                    <h2 >OBytes Vessel Reporting and Tracking System</h2>
+                </font>
+            </div>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+            
+            <div class="collapse navbar-collapse" id="navbarsExample03">
+	            <ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a class="nav-link nav-color dropdown-toggle nav-notif" data-toggle="dropdown"><font color="red"><span class="label label-pill label-danger count" style="border-radius:10px;"></span></font> <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>Notification</a>
+						<ul class="dropdown-menu" id="notification"></ul>
+					</li>
+				</ul>
+			</div>
+        </nav>
+        
+        <h1>TEST LORUM IPSUM</h1>
+        
+        
+        <div class="row">
+        	<div class="col-md-4">
+        	</div>
+        	
+        	<div class="col-md-8">
+        		<span><h4>Test Notifications</h4></span>
+        		<ul class="" id="notification_result"></ul>
+        	</div>
+        </div>
+        
+        <div id="container" style="height: 400px;"></div>
+        
+       </div> 
+    
+
 </body>
+
+<script type="text/javascript" th:src="@{/js/sidebar.js}" ></script>
+
+<script>
+			$(document).ready(function(){
+ 
+				function load_unseen_notification(view = '')
+				{
+					$.ajax({
+						url:"/fetch-report-records",
+						method:"POST",
+						data:{view:view},
+						success:function(data)
+						{
+							// console.log("data: " + data);
+
+							// console.log(data);
+
+							//var result = JSON.parse(data);
+							//alert(result);
+
+							 /*console.log("notification: " + result.notification);
+							 console.log('unseen: ' + result.unseen_notification);
+
+							$('#notification').html(result.notification);
+							if(result.unseen_notification > 0)
+							{
+								$('.count').html(result.unseen_notification);
+							} */
+							
+							console.log(data);
+							
+							// test
+							$('#notification_result').html(data);
+						},
+						error:function(req, status, error)
+						{
+							console.log("req: " + req);
+							console.log("status: " + status);
+							console.log("error: " + error);
+						}
+					});
+				}
+
+				//load_unseen_notification();
+
+				/* $(document).on('click', '.dropdown-toggle', function(){
+					$('.count').html('');
+					load_unseen_notification('yes');
+				}); */
+ 
+				/* setInterval(function(){ 
+					load_unseen_notification();
+				}, 5000);  */
+				drawLineChart();
+			});
+			
+			function drawLineChart() {
+				var chart = null;
+				chart = new HighCharts.chart('container', {
+					chart: {
+						type: 'line',
+						width: 500
+					},
+					title : {
+						text: 'Line Chart'
+					},
+					xAxis: {
+						categories: ["Jan", "Feb", "Mar"]
+					},
+					tooltip: {
+						formatter: function(){
+							console.log(this);
+						}
+					},
+					series: [{
+						data: [10, 20, 30]
+					}]
+				});
+			}
+			
+		</script>
+
+
+
 </html>

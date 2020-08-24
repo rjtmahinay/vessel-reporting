@@ -1,9 +1,10 @@
 package com.karagathon.helper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 
 public final class DateFormatter {
 	
@@ -12,5 +13,14 @@ public final class DateFormatter {
 	public static final String format(LocalDateTime localDateTime) {
 		 return DateTimeFormatter.ofPattern(PATTERN).format(localDateTime).toString();
 	}
+	
+ 	public static final Date format(String localDateString, String pattern) {
+ 		
+ 		
+ 		return java.sql.Date.valueOf(LocalDate.parse(localDateString, DateTimeFormatter.ofPattern(pattern)));
+ 	}
+ 	
+ 	
+ 	
 	
 }

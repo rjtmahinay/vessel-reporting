@@ -1,6 +1,7 @@
 package com.karagathon.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 
@@ -12,7 +13,7 @@ import com.karagathon.model.Violator;
 import com.karagathon.repository.ViolatorRepository;
 
 @Service
-public class ViolatorService {
+public class ViolatorService implements ApplicationService{
 	
 	@Autowired  
 	private ViolatorRepository violatorRepository;  
@@ -45,5 +46,13 @@ public class ViolatorService {
 	
 	public Violator findById(Long id) {
 		return violatorRepository.findById(id).orElse(null);
+	}
+	
+	public List<Violator> findViolatorsByName( String name ) {
+		if( Objects.isNull(name) || name.isEmpty() || name.isBlank() ) {
+			return violatorRepository.findAll();
+		}
+		
+		return violatorRepository.searchViolatorByName(name);
 	}
 } 

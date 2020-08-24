@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +30,13 @@ import com.karagathon.helper.BucketBeanHelper;
 import com.karagathon.helper.FileHelper;
 import com.karagathon.helper.LabelValueBeanHelper;
 import com.karagathon.helper.ListConversionHelper;
+import com.karagathon.helper.SpecificServiceHelper;
 import com.karagathon.model.Media;
+import com.karagathon.model.Vessel;
 import com.karagathon.model.Violation;
+import com.karagathon.model.Violator;
 import com.karagathon.service.MediaService;
+import com.karagathon.service.VesselService;
 import com.karagathon.service.ViolationService;
 import com.karagathon.service.ViolatorService;
 
@@ -48,10 +53,16 @@ public class ViolationSubmissionController {
 	MediaService mediaService;
 	
 	@Autowired
+	VesselService vesselService;
+	
+	@Autowired
 	FileHelper fileHelper;
 	
 	@Autowired
 	AWSS3Service s3Service;
+	
+	@Autowired
+	SpecificServiceHelper serviceHelper;
 	
 	@Value("${violation.file.path}")
 	String destination;
@@ -64,29 +75,33 @@ public class ViolationSubmissionController {
 	
 	@RequestMapping("/violations")
 	public String dashboard(Model model) {
-		List<Violation> violations = violationService.getAllViolations();
-		
+		List<Violation> violations = violationService.getAllViolations();		
 		model.addAttribute("violations", violations);
+		
 		
 		return "violation-dashboard.html";
 	}
 	
-	@GetMapping("/violation/{id}")
-	public ModelAndView getSpecificViolation(@PathVariable("id") Long id) {
-		ModelAndView mav = new ModelAndView();
-		Violation violation = violationService.findById(id);
+	
+	@GetMapping("/search-violation")
+    public ModelAndView searchViolation(@RequestParam("keyword") String title) {
 		
-		if(!Objects.isNull(violation)) {
-			List<Media> media = mediaService.findMediaByViolation(violation);
-			mav.addObject("violation", violation);
-			mav.addObject("media", media);
-		 	mav.setViewName("violation-specific.html");
-		}else{
-			mav.addObject("error", "error");
-			mav.setViewName("error.html");
+		if( Objects.isNull(title) || title.isEmpty() || title.isBlank() ) {
+			return new ModelAndView("redirect:/violations");
 		}
+		ModelAndView mav = new ModelAndView();
+		List<Violation> violations = violationService.findViolationsByTitle(title);		
+		
+		mav.addObject("violations", violations);
+		mav.addObject("keyword", title);
+		mav.setViewName("violation-dashboard");
 		
 		return mav;
+    }
+	
+	@GetMapping("/violation/{id}")
+	public ModelAndView getSpecificViolation(@PathVariable("id") Long id) {
+		return serviceHelper.getSpecific(violationService, id);
 	}
 	
 	@RequestMapping("/add-violation")
@@ -101,11 +116,12 @@ public class ViolationSubmissionController {
 	
 	
 	@PostMapping("/submit-violation")
-	public String saveViolation(@ModelAttribute("violation") Violation violation, @RequestParam("violator_id[]") List<String> violatorIds, 
-								@RequestParam(value="files", required=false) List<MultipartFile> files, @RequestParam(value="media_id[]", required=false) List<String> removedMediaIds) {
-		
-		violation.setViolators(violatorService.getViolatorsByIds( ListConversionHelper.stringToLong(violatorIds) ));
-		
+	public String saveViolation(@ModelAttribute("violation") Violation violation, @RequestParam("violator_id[]") List<Violator> violators, 
+								@RequestParam(value="files", required=false) List<MultipartFile> files, @RequestParam(value="media_id[]", required=false) List<String> removedMediaIds, 
+								@RequestParam(value="vessel_id[]") List<Vessel> vessels) {
+				
+		violation.setViolators( violators );
+		violation.setVessels( vessels );
 		System.out.println(violation);
 		
 		Violation savedViolation = violationService.saveAndFlush(violation);
@@ -150,12 +166,13 @@ public class ViolationSubmissionController {
 	public String updateViolation(Model model, @PathVariable("id") Long id) {
 		Violation violation = violationService.findById(id);
 		List<Media> media = mediaService.findMediaByViolation(violation);
-		
 		model.addAttribute("violation", violation);
 		model.addAttribute("media", media);
 		model.addAttribute("update", true);
 		return "add-violation.html";
 	}
+	
+	
 	
 //	@PostMapping("/submit-violation")
 //	@ResponseBody

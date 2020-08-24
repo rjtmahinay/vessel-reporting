@@ -107,6 +107,18 @@
 					</li>
 				</ul>
 			</div>
+			<div class="row mt-4">
+				<div class="col-md-4">
+					<h5>Vessels Involved: </h5><hr>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<ul th:each="vessel : ${violation.vessels}">
+					<li>
+						<a th:href="@{/vessel/{id}(id=${vessel.id})}"  th:text="${vessel.vesselName}" ></a>
+					</li>
+				</ul>
+			</div>
 			<div class="row mt-5">
 				<div class="col-md-4">
 					<h5>Images/Videos </h5><hr>

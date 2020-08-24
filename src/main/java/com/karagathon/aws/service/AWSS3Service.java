@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -70,7 +71,7 @@ public class AWSS3Service {
     }
     
     @Async
-    public byte[] downloadFile(final String keyName, BucketBeanHelper bucketBean) {
+    public byte[] downloadFile(final String keyName, BucketBeanHelper bucketBean) throws AmazonS3Exception {
         byte[] content = null;
         final S3Object s3Object = amazonS3.getObject(bucketBean.getBucketName(), bucketBean.getObjectFilePath()+keyName);
         final S3ObjectInputStream stream = s3Object.getObjectContent();
