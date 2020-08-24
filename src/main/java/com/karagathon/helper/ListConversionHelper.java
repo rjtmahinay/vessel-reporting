@@ -21,7 +21,6 @@ public class ListConversionHelper {
 		return listOfString.stream().map( string -> new Media(string, model) ).collect(Collectors.toList());
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	public static List<String> objectToList(Object obj) {
 	    List<String> list = new ArrayList<>();

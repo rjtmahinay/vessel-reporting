@@ -17,8 +17,7 @@ import com.karagathon.service.MediaService;
 public class SpecificServiceHelper {
 	
 	@Autowired MediaService mediaService;
-	
-	
+
 	public ModelAndView getSpecific(ApplicationService applicationService, Long id) {
 		ModelAndView mav = new ModelAndView();
 		IModel model = applicationService.findById(id);
