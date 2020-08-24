@@ -46,6 +46,7 @@ public class Report implements IModel{
 	@Column(length=Integer.MAX_VALUE)
 	private String description;
 	
+
 	public Report() {}
 
 	public Report(String name, @Length(max = 1000) String location, Date dateOfReport,
@@ -59,6 +60,15 @@ public class Report implements IModel{
 	
 	public Report( Long id, String name, List<Media> media, String description ) {
 		
+	}
+
+	public Report() {}
+	
+	public Report(Long id, String name, List<Media> media, @Length(max = 2147483647) String description) {
+		this.id = id;
+		this.name = name;
+		this.media = media;
+		this.description = description;
 	}
 
 
@@ -101,6 +111,7 @@ public class Report implements IModel{
 
 
 
+
 	public String getLocation() {
 		return location;
 	}
@@ -130,4 +141,5 @@ public class Report implements IModel{
 		return "Report [id=" + id + ", name=" + name + ", location=" + location + ", dateOfReport=" + dateOfReport
 				+ ", description=" + description + "]";
 	}
+
 }
