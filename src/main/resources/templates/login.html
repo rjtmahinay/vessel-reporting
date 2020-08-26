@@ -1,30 +1,33 @@
+<!DOCTYPE html>
+<head></head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<!-- Start of Bootstrap Code -->
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container-fluid">
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+<!-- Fav Icon -->
+ <link rel="shortcut icon" media="all" href="/images/cloud-computing.ico">
+ 
+ <title>OBytes</title>
+</head>
 
-            </ul>
-        </div>
-    </div>
-</nav>
+
 
 <body>
 <div class="py-5 bg-image-full" style="background-color: #FFFFFF; height:100%">
 <section class="py-2" >
   <div class="container">
     <div class="row">
-      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    
+      <div class="col-sm-1 col-md-7 col-lg-5 mx-auto">
+      	<img src="/images/cloud-computing.png" style="max-width: 124px;" class="d-block m-auto"/>
+      	 <font color="black">
+                    <h2 style="text-align: center">OBytes Vessel Reporting and Tracking System</h2>
+         </font>
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center">Log In</h5>
+            <h5 class="card-title text-center">Sign In to Continue</h5>
               <div th:if="${param.error}" class="alert alert-error warning">
                   <span style="color:red;">Invalid username and password.</span>
               </div>
@@ -37,15 +40,15 @@
                   <input type="username" id="username" name="username" class="form-control" required autofocus>
 
               </div>
-<br/>
+			<br/>
               <div class="form-label-group">
                   <label for="password">Password:</label>
                   <input type="password" id="password" name="password" class="form-control" required>
 
               </div>
          <br/>
-              <button class="btn btn-lg btn-dark btn-block text-uppercase" type="submit">Login</button>
-              <hr class="my-4">
+              <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Submit</button>
+              
             </form>
           </div>
         </div>
@@ -56,4 +59,5 @@
 
   </div>
 
+<!-- <div th:replace="fragments/footer"></div> --> 
 </body>
