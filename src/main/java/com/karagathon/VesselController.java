@@ -65,6 +65,9 @@ public class VesselController {
 	@Value("${aws.s3.vessel.bucket}")
 	String bucketName;
 	
+	@Value("${aws.access_key_id}")
+    String accessKeyId;
+	
 	@RequestMapping("/vessels")
 	public String dashboard(Model model) {
 		List<Vessel> vessels = vesselService.getAllVessels();

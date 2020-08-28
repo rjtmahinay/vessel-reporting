@@ -59,15 +59,12 @@
 
 </head>
 <body>
-
-	
-	
-	<h2>Vessel <span th:text="'#' + ${vessel.id}"></span></h2>
-	<hr>
 	<div class="container">
+		<h2>Vessel <span th:text="'#' + ${vessel.id}"></span></h2>
+		<hr>
 		<div class="row">
-			<div class="col-md-8"></div>
-			<div class="col-md-4">
+			<div class="col-md-11"></div>
+			<div class="col-md-1">
 				<a th:href="@{/edit/vessel/{id}(id=${vessel.id})}">
                     <i id="pencil-edit" class="fa fa-pencil-alt pencil-format"></i>
                 </a>
@@ -90,7 +87,7 @@
 				</div>
 			</div>
 			
-			<div class="row mb-4">
+			<div class="row">
 				<div class="col-md-8">
 					<label><b>License Type: </b><span th:text="${vessel.licenseType}"></span></label>
 				</div>
@@ -105,12 +102,40 @@
 					<h5>Images </h5><hr>
 				</div>
 			</div>
-			<div class="row" >
-				<!-- <img th:src="@{/uploads/apple.jfif}" alt="no image" class="img-fluid" /> -->
-				<div class="column" th:each="medium : ${media}">
-      				<img class="" th:src="@{/vessel/image/{id}(id=${medium.id})}" width="100" height="200">
-    			</div>
-			</div>
+			 <!--Carousel Wrapper-->
+		    <div id="carousel-thumb" class="carousel slide carousel-fade carousel-thumbnails" data-ride="carousel">
+		      <!--Slides-->
+		      <div class="carousel-inner" role="listbox">
+		        <div class="carousel-item" th:classappend="${mediumIter.index == 0} ? 'active' : '' " th:each="medium,mediumIter : ${media}">
+		          <img class="d-block mx-auto" style="min-width: 50vw; width: 80%; height:60vh;" th:src="@{/vessel/image/{id}(id=${medium.id})}" alt="${medium.mediaFilePath}">
+		        </div>
+		      </div>
+		      <!--/.Slides-->
+		      <!--Controls-->
+<!-- 		      <a class="carousel-control-prev" href="#carousel-thumb" role="button" data-slide="prev">
+		        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		        <span class="sr-only">Previous</span>
+		      </a>
+		      <a class="carousel-control-next" href="#carousel-thumb" role="button" data-slide="next">
+		        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		        <span class="sr-only">Next</span>
+		      </a> -->
+		      <!--/.Controls-->
+		      
+		      <ol class="carousel-indicators">
+		      	<li data-target="#carousel-thumb" th:attr="data-slide-to=${mediumIter.index}" th:classappend="${mediumIter.index == 0} ? 'active' : '' " th:each="medium,mediumIter : ${media}">
+		      		<img class="d-block w-100 d-100 img-fluid"  th:src="@{/vessel/image/{id}(id=${medium.id})}" alt="${medium.mediaFilePath}">
+		      	</li>
+		      	 <a class="carousel-control-prev" href="#carousel-thumb" role="button" data-slide="prev">
+		            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		            <span class="sr-only">Previous</span>
+		          </a>
+		          <a class="carousel-control-next" href="#carousel-thumb" role="button" data-slide="next">
+		            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		            <span class="sr-only">Next</span>
+		          </a>
+		      </ol>
+		    </div>
 			
 		</div>
 	

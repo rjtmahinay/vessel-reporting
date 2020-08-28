@@ -12,28 +12,37 @@
 <body>
 
 <br/>
-<div class="row mb-4">
-	<div class="col-md-4">
-		<h2>Violators</h2>
+
+<div class="container">
+	<div class="row mb-4">
+		<div class="col-md-4">
+			<h2>Violators</h2>
+		</div>
+		<div class="col-md-8">
+			<form th:action="@{/search-violator}" method="GET">
+			    <div class="row">
+			    	<div class="col-md-6">
+				    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
+			    	</div>
+			    	<div class="col-md-2">
+			    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
+			    	</div>
+			    </div>
+			</form>
+		</div>
 	</div>
-	<div class="col-md-8">
-		<form th:action="@{/search-violator}" method="GET">
-		    <div class="row">
-		    	<div class="col-md-6">
-			    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
-		    	</div>
-		    	<div class="col-md-2">
-		    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
-		    	</div>
-		    </div>
-		</form>
+	
+	<div class="card mb-4"  th:each="violator : ${violators}">
+			<div class="card-header" th:text="${'Violator ID #' + violator.id}"></div>
+			  <div class="card-body">
+				    <h4 class="card-title" th:text="${violator.lastName + ', ' + violator.firstName}">Card title</h4>
+				    <h6 class="card-subtitle mb-2 text-muted" th:text="${violator.dateOfBirth}"></h6>
+				    <!-- <p class="card-text" th:text="${violation.description}"></p> -->
+				    <a th:href="@{/violator/{id}(id=${violator.id})}"  class="btn btn-primary stretched-link"   >Details</a>
+			  </div>
 	</div>
+
 </div>
-<ul class="list-group" th:each="violator : ${violators}">
-		<li class="list-group-item">
-			<a th:href="@{/violator/{id}(id=${violator.id})}"  th:text="${violator.lastName + ', ' + violator.firstName}" ></a>
-		</li>
-</ul>
 
 
 </body>

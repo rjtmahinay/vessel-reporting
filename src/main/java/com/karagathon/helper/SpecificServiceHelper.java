@@ -2,6 +2,8 @@ package com.karagathon.helper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ public class SpecificServiceHelper {
 		if(!Objects.isNull(model)) {
 			List<Media> media = mediaService.findMediaByModel(model);
 			mav.addObject(modelName, model);
-			mav.addObject("media", media);
+			mav.addObject("media", media);	
 		 	mav.setViewName(modelName.concat("-specific.html"));
 		}else{
 			mav.addObject("error", "error");

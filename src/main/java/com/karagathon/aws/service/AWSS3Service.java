@@ -72,8 +72,9 @@ public class AWSS3Service {
     
     @Async
     public byte[] downloadFile(final String keyName, BucketBeanHelper bucketBean) throws AmazonS3Exception {
+    	System.out.println(bucketBean);
         byte[] content = null;
-        final S3Object s3Object = amazonS3.getObject(bucketBean.getBucketName(), bucketBean.getObjectFilePath()+keyName);
+        final S3Object s3Object = amazonS3.getObject(bucketBean.getBucketName(), bucketBean.getObjectFilePath()+keyName.trim());
         final S3ObjectInputStream stream = s3Object.getObjectContent();
         try {
             content = IOUtils.toByteArray(stream);
