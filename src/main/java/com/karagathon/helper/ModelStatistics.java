@@ -1,9 +1,12 @@
 package com.karagathon.helper;
 
-public class ModelStatistics {
+
+public interface ModelStatistics {
+
+	Integer getMonth();
 	
-	
-	
+	Long getValue();
+
 	private Integer month;
 	
 	private Long value;
@@ -34,6 +37,5 @@ public class ModelStatistics {
 	public String toString() {
 		return "ModelStatistics [month=" + month + ", value=" + value + "]";
 	}
-	
-	
+
 }

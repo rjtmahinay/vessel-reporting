@@ -30,6 +30,24 @@ public interface ReportsRepository extends JpaRepository<Report, Long>{
 	@Query("SELECT v FROM Report v where v.description LIKE CONCAT('%',:description,'%')")    
     List<Report> searchReportByDescription(@Param("description") String description);
 	
-	@Query("Select new com.karagathon.helper.ModelStatistics(MONTH(v.dateOfReport) as month, Count(v.dateOfReport) as value) from Report v GROUP by MONTH(v.dateOfReport)")
-	List<ModelStatistics> getMonthStatisticsFromReport();
+	@Query(value="SELECT months.month as month, COUNT(r.date_of_report) as value" + 
+			"            FROM" + 
+			"            (" + 
+			"						SELECT 1 AS MONTH" + 
+			"                       UNION SELECT 2 AS MONTH" + 
+			"                       UNION SELECT 3 AS MONTH" + 
+			"                       UNION SELECT 4 AS MONTH" + 
+			"                       UNION SELECT 5 AS MONTH" + 
+			"                       UNION SELECT 6 AS MONTH" + 
+			"                       UNION SELECT 7 AS MONTH" + 
+			"                       UNION SELECT 8 AS MONTH" + 
+			"                       UNION SELECT 9 AS MONTH" + 
+			"                       UNION SELECT 10 AS MONTH" + 
+			"                       UNION SELECT 11 AS MONTH" + 
+			"                       UNION SELECT 12 AS MONTH ) as months" + 
+			"			LEFT JOIN report r ON months.month = MONTH(r.date_of_report)" + 
+			"			AND YEAR(r.date_of_report) = :year"	 +		
+			"            GROUP BY months.month", nativeQuery=true)
+	List<ModelStatistics> getMonthStatisticsFromReport(@Param("year") String year);
+
 } 

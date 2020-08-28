@@ -9,28 +9,39 @@
 <body>
 
 <br/>
-<div class="row mb-4">
-	<div class="col-md-4">
-		<h2>Vessels</h2>
+
+<div class="container">
+	<div class="row mb-4">
+		<div class="col-md-4">
+			<h2>Vessels</h2>
+		</div>
+		<div class="col-md-8">
+			<form th:action="@{/search-vessel}" method="GET">
+			    <div class="row">
+			    	<div class="col-md-6">
+				    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
+			    	</div>
+			    	<div class="col-md-2">
+			    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
+			    	</div>
+			    </div>
+			</form>
+		</div>
 	</div>
-	<div class="col-md-8">
-		<form th:action="@{/search-vessel}" method="GET">
-		    <div class="row">
-		    	<div class="col-md-6">
-			    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
-		    	</div>
-		    	<div class="col-md-2">
-		    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
-		    	</div>
-		    </div>
-		</form>
+	
+	<div class="card mb-4"  th:each="vessel : ${vessels}">
+		<div class="card-header" th:text="${'Vessel License ID #' + vessel.licenseId}"></div>
+		  <div class="card-body">
+			    <h4 class="card-title" th:text="${vessel.vesselName}">Card title</h4>
+			    <h6 class="card-subtitle mb-2 text-muted" th:text="${'License Expiry: ' + vessel.licenseExpiry}"></h6>
+			    <p class="card-text" th:text="${vessel.licenseType}"></p>
+			    <a th:href="@{/vessel/{id}(id=${vessel.id})}"  class="btn btn-primary stretched-link"   >Details</a>
+		  </div>
 	</div>
+
+
 </div>
-<ul class="list-group" th:each="vessel : ${vessels}">
-		<li class="list-group-item">
-			<a th:href="@{/vessel/{id}(id=${vessel.id})}"  th:text="${vessel.vesselName}" ></a>
-		</li>
-</ul>
+
 
 
 </body>

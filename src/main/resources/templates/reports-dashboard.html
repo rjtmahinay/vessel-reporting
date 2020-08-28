@@ -11,28 +11,36 @@
 <body>
 
 <br/>
-<div class="row mb-4">
-	<div class="col-md-4">
-		<h2>Reports</h2>
+<div class="container">
+	<div class="row mb-4">
+		<div class="col-md-4">
+			<h2>Reports</h2>
+		</div>
+		<div class="col-md-8">
+			<form th:action="@{/search-report}" method="GET">
+			    <div class="row">
+			    	<div class="col-md-6">
+				    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
+			    	</div>
+			    	<div class="col-md-2">
+			    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
+			    	</div>
+			    </div>
+			</form>
+		</div>
 	</div>
-	<div class="col-md-8">
-		<form th:action="@{/search-report}" method="GET">
-		    <div class="row">
-		    	<div class="col-md-6">
-			    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
-		    	</div>
-		    	<div class="col-md-2">
-		    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
-		    	</div>
-		    </div>
-		</form>
+	
+	<div class="card mb-4"  th:each="report : ${reports}">
+		<div class="card-header" th:text="${'Report ID #' + report.id}"></div>
+		  <div class="card-body">
+			    <h4 class="card-title" th:text="${'Reported by ' + report.name}">Card title</h4>
+			    <h6 class="card-subtitle mb-2 text-muted" th:text="${report.dateOfReport}"></h6>
+			    <p class="card-text" th:text="${report.description}"></p>
+			    <a th:href="@{/report/{id}(id=${report.id})}"  class="btn btn-primary stretched-link"   >Details</a>
+		  </div>
 	</div>
 </div>
-<ul class="list-group" th:each="report : ${reports}">
-		<li class="list-group-item">
-			<a th:href="@{/report/{id}(id=${report.id})}"  th:text="${report.description}" ></a>
-		</li>
-</ul>
+
 
 
 </body>

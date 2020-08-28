@@ -24,6 +24,11 @@ public class BucketBeanHelper {
 	public void setObjectFilePath(String objectFilePath) {
 		this.objectFilePath = objectFilePath;
 	}
+
+	@Override
+	public String toString() {
+		return "BucketBeanHelper [bucketName=" + bucketName + ", objectFilePath=" + objectFilePath + "]";
+	}
 	
 	
 	

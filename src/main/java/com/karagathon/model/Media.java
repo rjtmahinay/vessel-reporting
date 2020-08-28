@@ -94,6 +94,8 @@ public class Media implements IModel {
 		return violation;
 	}
 
+	
+
 	public void setViolation(Violation violation) {
 		this.violation = violation;
 	}
@@ -120,6 +122,11 @@ public class Media implements IModel {
 
 	public void setVessel(Vessel vessel) {
 		this.vessel = vessel;
+	}
+	
+	@Override
+	public String toString() {
+		return "Media [id=" + id + ", mediaFilePath=" + mediaFilePath + "]";
 	}
 	
 	

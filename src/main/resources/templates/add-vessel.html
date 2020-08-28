@@ -36,31 +36,52 @@
 		
 			<input type="hidden" name="vessel_id" th:field="*{id}" /> 
 			
-			<input type="text" th:field="*{vesselName}"
-				class="form-control mb-4 col-4" placeholder="Vessel Name">
-				
-			<input type="text" th:field="*{licenseId}"
-				class="form-control mb-4 col-4" placeholder="License Id">
+			<div class="form-group">
+				<div class="">
+					<label for="vesselName" class="label-input  control-label">Vessel Name<span class="required">*</span></label>
+					<input id="vesselName" type="text" th:field="*{vesselName}" class="form-control col-8" placeholder="Enter vessel" required>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<div class="col-md-6">
+					<label for="licenseId" class="label-input  control-label">License ID<span class="required">*</span></label>
+					<input type="text" id="licenseId" th:field="*{licenseId}"
+							class="form-control" placeholder="Enter License ID">
+				</div>	
+				<div class="col-md-6">
+					<label for="licenseType" class="label-input  control-label">License Type<span class="required">*</span></label>
+					<input id="licenseType" type="text" th:field="*{licenseType}"
+					class="form-control" placeholder="Fishing">
+				</div>
+			</div>
 			
 			<!-- <textarea class="form-control mb-4 col-6" th:field="*{description}" placeholder="Description" style="height: 300px;"></textarea> -->
-					
-			<input type="date" th:field="*{licenseExpiry}"
-				class="form-control mb-4 col-2" placeholder="License Expiry Date" > 
-				
-			<input type="text" th:field="*{licenseType}"
-				class="form-control mb-4 col-6" placeholder="License Type">
-				
-			  <select  class="form-control mb-4 col-6" required="required"  name="owner" id="owner">
-			  	<option value="none" th:selected="${update != false} ">None</option>
-			      <option th:each="currentOwner : ${owners}" th:value="${currentOwner.id}" th:text="${currentOwner.lastName + ', ' + currentOwner.firstName}" 
-			      			th:selected="${currentOwner.id == vessel.violator?.id}" >
-			      </option>
-		    	</select>
 			
-			 <div class="col-md-8 mb-5">
-				<!-- <input type="file" name="files" multiple >			 -->
-				<input type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
-			</div> 
+			<div class="form-group row">
+				<div class="col-md-4">
+					<label for="licenseExpiry" class="label-input  control-label">Date of Expiry<span class="required"></span></label>
+					<input type="date" id="licenseExpiry" th:field="*{licenseExpiry}"
+				class="form-control" placeholder="License Expiry Date" >
+				</div>	
+				<div class="col-md-8">
+					<label for="owner" class="label-input  control-label">Owner<span class="required">*</span></label>
+					<select class="form-control" required="required"  name="owner" id="owner">
+				  		<option value="none" th:selected="${update != false} ">None</option>
+				      	<option th:each="currentOwner : ${owners}" th:value="${currentOwner.id}" th:text="${currentOwner.lastName + ', ' + currentOwner.firstName}" 
+				      			th:selected="${currentOwner.id == vessel.violator?.id}" >
+				      	</option>
+			    	</select>
+				</div>
+			</div>
+				
+			 <div class="form-group">
+			 	<div class="row-4 mb-4">
+					<!-- <input type="file" name="files" multiple >			 -->
+					<label for="files" class="label-input  control-label">Photos/Videos</label>
+					<input id="files" type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
+				</div> 
+			 </div>
 			
 			<div th:if="${update}">
 				<h5 >Images</h5>
@@ -82,8 +103,10 @@
 			<div class="col-md-8 media-inputs mb-2">
 			</div>
 			
-			<button type="submit" class="btn btn-info col-2" th:if="${update}">Save Changes</button>
-			<button type="submit" class="btn btn-info col-2" th:unless="${update}">Submit</button>
+			<div class="col-md-12" style="text-align:center">
+					<button type="submit" class="btn btn-success col-6" th:if="${update}">Save Changes</button>
+					<button type="submit" class="btn btn-success col-6" th:unless="${update}">Submit</button>
+			</div>
 	
 		</form>
 	

@@ -77,11 +77,8 @@ public class ViolationSubmissionController {
 	public String dashboard(Model model) {
 		List<Violation> violations = violationService.getAllViolations();		
 		model.addAttribute("violations", violations);
-		
-		
 		return "violation-dashboard.html";
 	}
-	
 	
 	@GetMapping("/search-violation")
     public ModelAndView searchViolation(@RequestParam("keyword") String title) {
@@ -113,13 +110,10 @@ public class ViolationSubmissionController {
 		return "add-violation.html";
 	}
 	
-	
-	
 	@PostMapping("/submit-violation")
 	public String saveViolation(@ModelAttribute("violation") Violation violation, @RequestParam("violator_id[]") List<Violator> violators, 
 								@RequestParam(value="files", required=false) List<MultipartFile> files, @RequestParam(value="media_id[]", required=false) List<String> removedMediaIds, 
 								@RequestParam(value="vessel_id[]") List<Vessel> vessels) {
-				
 		violation.setViolators( violators );
 		violation.setVessels( vessels );
 		System.out.println(violation);
@@ -140,6 +134,7 @@ public class ViolationSubmissionController {
 
 	@GetMapping("/violation/image/{id}")
 	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
+		// tantan - generalize to include videos
 		response.setContentType("image/jfif"); 
 		Media medium = mediaService.findById(id);
 
@@ -172,30 +167,5 @@ public class ViolationSubmissionController {
 		return "add-violation.html";
 	}
 	
-	
-	
-//	@PostMapping("/submit-violation")
-//	@ResponseBody
-//	public Long submitViolation(@RequestBody Violation violation) {
-//		violationService.save(violation);
-//		return violation.getId();
-//	}
-//	
-//	@GetMapping("/violations")
-//	public List<Violation> getViolations() {
-//		return violationService.getAllViolations();
-//	}
-//	
-//	@PutMapping("/update-violation")
-//	public Violation updateViolation(@RequestBody Violation violation) {
-//		violationService.update(violation);
-//		return violation;
-//	}
-//	
-//	@DeleteMapping("/violation/{violationId}")  
-//	private void deleteViolation(@PathVariable("violationId") Long violationId)   
-//	{  
-//		violationService.delete(violationId);
-//	}  
 	
 }

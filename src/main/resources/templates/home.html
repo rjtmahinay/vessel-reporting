@@ -4,25 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
-   crossorigin="anonymous">
-	<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+	<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!-- JS, Popper.js, and jQuery -->
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    
+   <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
    
    <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
    <link th:href="@{/css/style3.css}" rel="stylesheet" />
-   
-   	
-   	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-   	
+
    	<!-- jQuery Custom Scroller CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     
     <script type="text/javascript" th:src="@{/js/highcharts/highcharts.js}" ></script>
     
     
+
 <title>Report</title>
+
 </head>
 <body>
 
@@ -64,7 +70,9 @@
     <div class="content">
         <nav class="navbar">
             <div class="">
-                <button type="button" id="sidebarCollapse" style="background-color: #fffff" class="btn btn-info">
+
+                <button type="button" id="sidebarCollapse" style="background-color: #fffff;" class="btn btn-info">
+
                     <i class="fas fa-align-justify"></i>
                     <span></span>
                 </button>
@@ -81,21 +89,28 @@
                 </font>
             </div>
             
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-            
-            <div class="collapse navbar-collapse" id="navbarsExample03">
-	            <ul class="nav navbar-nav navbar-right">
+
+            <div class="col-m-4">
+            	<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
-						<a class="nav-link nav-color dropdown-toggle nav-notif" data-toggle="dropdown"><font color="red"><span class="label label-pill label-danger count" style="border-radius:10px;"></span></font> <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>Notification</a>
+						<a class="nav-link nav-color dropdown-toggle nav-notif" data-toggle="dropdown">
+						<font color="red">
+							<span class="badge badge-pill badge-danger count" style="border-radius:10px;"></span>
+						</font> 
+							<span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>Notification</a>
 						<ul class="dropdown-menu" id="notification"></ul>
 					</li>
 				</ul>
-			</div>
+            </div>
+            
+        	
         </nav>
         
-        <h1>TEST LORUM IPSUM</h1>
+        <div class="container">
+        	<h1>TEST LORUM IPSUM</h1>
+        </div>
+
+
         
         
         <div class="row">
@@ -147,7 +162,8 @@
 							console.log(data);
 							
 							// test
-							$('#notification_result').html(data);
+
+							$('#notification').html(data);
 						},
 						error:function(req, status, error)
 						{
@@ -158,7 +174,9 @@
 					});
 				}
 
-				//load_unseen_notification();
+
+				load_unseen_notification();
+
 
 				/* $(document).on('click', '.dropdown-toggle', function(){
 					$('.count').html('');
@@ -168,33 +186,10 @@
 				/* setInterval(function(){ 
 					load_unseen_notification();
 				}, 5000);  */
-				drawLineChart();
+
+				
 			});
-			
-			function drawLineChart() {
-				var chart = null;
-				chart = new HighCharts.chart('container', {
-					chart: {
-						type: 'line',
-						width: 500
-					},
-					title : {
-						text: 'Line Chart'
-					},
-					xAxis: {
-						categories: ["Jan", "Feb", "Mar"]
-					},
-					tooltip: {
-						formatter: function(){
-							console.log(this);
-						}
-					},
-					series: [{
-						data: [10, 20, 30]
-					}]
-				});
-			}
-			
+	
 		</script>
 
 
