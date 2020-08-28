@@ -49,4 +49,5 @@ public interface ReportsRepository extends JpaRepository<Report, Long>{
 			"			AND YEAR(r.date_of_report) = :year"	 +		
 			"            GROUP BY months.month", nativeQuery=true)
 	List<ModelStatistics> getMonthStatisticsFromReport(@Param("year") String year);
+
 } 
