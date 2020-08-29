@@ -92,7 +92,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<label><b>Date of Birth: </b><span th:text="${violator.dateOfBirth}"></span></label>
+					<label><b>Date of Birth: </b><span th:text="${#dates.format(violator.dateOfBirth, 'yyyy-MM-dd')}"></span></label>
 				</div>
 				<div class="col-md-6">
 					<label><b>Age: </b><span th:text="${age}"></span></label>

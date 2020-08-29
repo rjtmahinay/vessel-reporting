@@ -40,7 +40,7 @@
 		<div class="card-header" th:text="${'Violation ID #' + violation.id}"></div>
 		  <div class="card-body">
 			    <h4 class="card-title" th:text="${violation.title}">Card title</h4>
-			    <h6 class="card-subtitle mb-2 text-muted" th:text="${violation.dateOfViolation}"></h6>
+			    <h6 class="card-subtitle mb-2 text-muted" th:text="${#dates.format(violation.dateOfViolation, 'yyyy-MM-dd')}"></h6>
 			    <p class="card-text" th:text="${violation.description}"></p>
 			    <a th:href="@{/violation/{id}(id=${violation.id})}"  class="btn btn-primary stretched-link"   >Details</a>
 		  </div>

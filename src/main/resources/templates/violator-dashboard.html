@@ -36,7 +36,7 @@
 			<div class="card-header" th:text="${'Violator ID #' + violator.id}"></div>
 			  <div class="card-body">
 				    <h4 class="card-title" th:text="${violator.lastName + ', ' + violator.firstName}">Card title</h4>
-				    <h6 class="card-subtitle mb-2 text-muted" th:text="${violator.dateOfBirth}"></h6>
+				    <h6 class="card-subtitle mb-2 text-muted" th:text="${#dates.format(violator.dateOfBirth, 'yyyy-MM-dd')}"></h6>
 				    <!-- <p class="card-text" th:text="${violation.description}"></p> -->
 				    <a th:href="@{/violator/{id}(id=${violator.id})}"  class="btn btn-primary stretched-link"   >Details</a>
 			  </div>

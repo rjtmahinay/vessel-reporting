@@ -96,7 +96,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-4">
-					<label><b>Date: </b><span th:text="${violation.dateOfViolation}"></span></label>
+					<label><b>Date: </b><span th:text="${#dates.format(violation.dateOfViolation, 'yyyy-MM-dd')}"></span></label>
 				</div>
 			</div>
 			
