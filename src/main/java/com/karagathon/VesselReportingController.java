@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -102,6 +105,7 @@ public class VesselReportingController {
 		User user = userRepository.getUser(principal.getName());
 
 		model.addAttribute("user", user);
+
 		return "home.html";
 	}
 
@@ -178,8 +182,20 @@ public class VesselReportingController {
 		System.out.println(savedNotification);
 
 		// add sms logic
+		ZoneId defaultZoneId = ZoneId.systemDefault();
 
-//		smsService.sendSMS(SMSService.singleReportMessage());
+		LocalDate localDate = LocalDate.now();
+
+		Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
+
+		int count = reportService.getCountOfReports(date);
+
+		if (count == 1) {
+			smsService.sendSMS(SMSService.singleReportMessage());
+		} else if (count == 2) {
+			smsService.sendSMS(SMSService.moreThanOneReportMessage());
+		}
+
 		return ResponseEntity.ok("{action: \"Success\"}");
 	}
 

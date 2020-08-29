@@ -148,7 +148,5 @@ public class Media implements IModel {
 		} else {
 			setMediaType("PICTURE");
 		}
-		System.out.println("MEDIA: " + getMediaFilePath());
-		System.out.println("MEDIA TYPE: " + getMediaType());
 	}
 }
