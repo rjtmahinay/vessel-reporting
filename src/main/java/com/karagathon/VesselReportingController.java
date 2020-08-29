@@ -35,6 +35,7 @@ import com.karagathon.helper.DateFormatter;
 import com.karagathon.helper.FileHelper;
 import com.karagathon.helper.ListConversionHelper;
 import com.karagathon.helper.SpecificServiceHelper;
+import com.karagathon.model.IModel;
 import com.karagathon.model.Location;
 import com.karagathon.model.Media;
 import com.karagathon.model.Notification;
@@ -45,6 +46,7 @@ import com.karagathon.service.LocationService;
 import com.karagathon.service.MediaService;
 import com.karagathon.service.NotificationService;
 import com.karagathon.service.ReportService;
+import com.karagathon.service.SMSService;
 
 @Controller
 public class VesselReportingController {
@@ -83,6 +85,9 @@ public class VesselReportingController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	SMSService smsService;
+
 	@RequestMapping("/login")
 	public String login(Principal principal) {
 
@@ -118,9 +123,12 @@ public class VesselReportingController {
 		return "reports-dashboard.html";
 	}
 
-	@GetMapping("/report/image/{id}")
-	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
+	@GetMapping("/report/media/{id}")
+	public void showViolationImage(@PathVariable Long id, HttpServletResponse response, Model model)
+			throws IOException {
 		response.setContentType("image/jfif");
+		response.setContentType("video/mp4");
+
 		Media medium = mediaService.findById(id);
 
 		if (!Objects.isNull(medium)) {
@@ -129,6 +137,7 @@ public class VesselReportingController {
 			IOUtils.copy(is, response.getOutputStream());
 
 		}
+
 	}
 
 	@PostMapping("/upload")
@@ -170,12 +179,35 @@ public class VesselReportingController {
 
 		// add sms logic
 
+//		smsService.sendSMS(SMSService.singleReportMessage());
 		return ResponseEntity.ok("{action: \"Success\"}");
 	}
 
 	@GetMapping("/report/{id}")
 	public ModelAndView getSpecificReport(@PathVariable("id") Long id) {
-		return serviceHelper.getSpecific(reportService, id);
+
+		ModelAndView mav = serviceHelper.getSpecific(reportService, id);
+
+		IModel model = reportService.findById(id);
+
+		List<Media> media = mediaService.findMediaByModel(model);
+
+		media.stream().distinct().forEach(medium -> {
+			boolean isVideo = false;
+			boolean isImage = false;
+
+			if (medium.getMediaType().equals("VIDEO")) {
+				isVideo = true;
+				mav.addObject("isVideo", isVideo);
+			}
+			if (medium.getMediaType().equals("PICTURE")) {
+				isImage = true;
+				mav.addObject("isImage", isImage);
+
+			}
+		});
+
+		return mav;
 	}
 
 	@GetMapping("/map")

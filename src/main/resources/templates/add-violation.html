@@ -25,9 +25,11 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap-filestyle.min.js}" ></script>
 	
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0joOztOvXtS7zlJo-Cmkq_R0yGyFDCqQ&libraries=places"></script>
+	
 	<title>Add Violation</title>
 </head>
-<body>
+<body onload="initializeLocation()">
 
 	<div class="container">
 
@@ -60,7 +62,7 @@
 			
 			<div class="form-group">
 				<label for="location" class="label-input control-label">Location of Violation<span class="required">*</span></label>
-				<input id="location" type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" > 
+				<input id="location" type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" onFocus="geolocate()"> 
 			</div>
 				
 			<style>
@@ -238,4 +240,42 @@
 	</div>
 
 </body>
+<script>
+var autocomplete;
+const componentForm = {
+		  location:"long_name"
+};
+		
+function initializeLocation() {
+	  
+	  autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')));
+	  
+	  autocomplete.setComponentRestrictions({
+		  country: ["ph"]
+	  });
+	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      });
+	 
+	}
+
+// Function of geolocate from Google Places API documentation
+function geolocate() {
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(position => {
+	      const geolocation = {
+	        lat: position.coords.latitude,
+	        lng: position.coords.longitude
+	      };
+	      console.log("Geolocation Lat: " + position.coords.latitude);
+	      console.log("Geolocation Long: " + position.coords.longitude);
+	      const circle = new google.maps.Circle({
+	        center: geolocation,
+	        radius: position.coords.accuracy
+	      });
+	      autocomplete.setBounds(circle.getBounds());
+	    });
+	  }
+	}
+
+</script>
 </html>
