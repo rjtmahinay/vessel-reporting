@@ -65,24 +65,37 @@
 		<hr>
 		<div class="report-fields my-2">
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Reported by: </b><span th:text="${report.name}"></span></label>
+				<div class="col-md-2">
+					<label><b>Reported by: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${report.name}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Date: </b><span th:text="${#dates.format(report.dateOfReport, 'yyyy-MM-dd')}"></span></label>
+				<div class="col-md-2">
+					<label><b>Date: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${#dates.format(report.dateOfReport, 'yyyy-MM-dd')}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Description: </b><span th:text="${report.description}"></span></label>
+				<div class="col-md-2">
+					<label><b>Description: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${report.description}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Location: </b><span th:text="${report.location}"></span></label>
+				<div class="col-md-2">
+					<label><b>Location: </b></label>
 				</div>
+				<div class="col-md-8">
+					<span th:text="${report.location}"></span>
+				</div>
+				
 			</div>
 			<div th:if="${isImage}" class="row mt-5">
 				<div  class="col-md-4">
@@ -91,7 +104,7 @@
 			</div>
 			
 			 <!--Carousel Wrapper-->
-		    <div id="carousel-thumb" class="carousel slide carousel-fade carousel-thumbnails" data-ride="carousel">
+		    <div th:if="${isImage}" id="carousel-thumb" class="carousel slide carousel-fade carousel-thumbnails" data-ride="carousel">
 		      <!--Slides-->
 		      <div  class="carousel-inner" role="listbox">
 		        <div class="carousel-item" th:classappend="${mediumIter.index == 0} ? 'active' : '' " th:each="medium,mediumIter : ${media}">

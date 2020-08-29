@@ -7,6 +7,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
 <style>
 		.row {
 	  display: flex;
@@ -70,31 +71,46 @@
                 </a>
 			</div>
 		</div>
-		<div class="report-fields my-2">
+		<div class="report-fields my-2 ">
 			<div class="row">
-				<div class="col-md-8">
-					<label><b>Vessel Name: </b><span th:text="${vessel.vesselName}"></span></label>
+				<div class="col-md-2">
+					<label><b>Vessel Name: </b></label>
+				</div>
+				<div class="col-md-10">
+				<span th:text="${vessel.vesselName}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>License Id: </b><span th:text="${vessel.licenseId}"></span></label>
+				<div class="col-md-2">
+					<label><b>License Id: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${vessel.licenseId}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
-					<label><b>License Expiry Date: </b><span th:text="${#dates.format(vessel.licenseExpiry, 'yyyy-MM-dd')}"></span></label>
+				<div class="col-md-2">
+					<label><b>License Expiry Date: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${#dates.format(vessel.licenseExpiry, 'yyyy-MM-dd')}"></span>
 				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-md-8">
-					<label><b>License Type: </b><span th:text="${vessel.licenseType}"></span></label>
+				<div class="col-md-2">
+					<label><b>License Type: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${vessel.licenseType}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-8">
-					<label><b>Owner: </b><a th:href="@{/violator/{id}(id=${vessel.violator.id})}"  th:text="${vessel.violator.lastName + ', ' +  vessel.violator.firstName}" ></a></label>
+				<div class="col-md-2">
+					<label><b>Owner: </b></label>
+				</div>
+				<div class="col-md-10">
+					<a th:href="@{/violator/{id}(id=${vessel.violator.id})}"  th:text="${vessel.violator.lastName + ', ' +  vessel.violator.firstName}" ></a>
 				</div>
 			</div>
 			<div class="row mt-5">

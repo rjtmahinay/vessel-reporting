@@ -85,24 +85,36 @@
 		</div>
 		<div class="report-fields my-2">
 			<div class="row">
-				<div class="col-md-8">
-					<label><b>Title: </b><span th:text="${violation.title}"></span></label>
+				<div class="col-md-2">
+					<label><b>Title: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${violation.title}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label><b>Description: </b><span th:text="${violation.description}"></span></label>
+				<div class="col-md-2">
+					<label><b>Description: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${violation.description}"></span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
-					<label><b>Date: </b><span th:text="${#dates.format(violation.dateOfViolation, 'yyyy-MM-dd')}"></span></label>
+				<div class="col-md-2">
+					<label><b>Date: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${#dates.format(violation.dateOfViolation, 'yyyy-MM-dd')}"></span>
 				</div>
 			</div>
 			
 			<div class="row mb-4">
-				<div class="col-md-8">
-					<label><b>Location: </b><span th:text="${violation.location}"></span></label>
+				<div class="col-md-2">
+					<label><b>Location: </b></label>
+				</div>
+				<div class="col-md-10">
+					<span th:text="${violation.location}"></span>
 				</div>
 			</div>
 			<div class="col-md-10">

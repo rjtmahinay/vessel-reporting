@@ -191,9 +191,9 @@ public class VesselReportingController {
 		int count = reportService.getCountOfReports(date);
 
 		if (count == 1) {
-			smsService.sendSMS(SMSService.singleReportMessage());
+			smsService.sendSMS(smsService.singleReportMessage());
 		} else if (count == 2) {
-			smsService.sendSMS(SMSService.moreThanOneReportMessage());
+			smsService.sendSMS(smsService.moreThanOneReportMessage());
 		}
 
 		return ResponseEntity.ok("{action: \"Success\"}");

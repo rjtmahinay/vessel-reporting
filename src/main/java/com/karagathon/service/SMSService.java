@@ -45,11 +45,11 @@ public class SMSService {
 		}
 	}
 
-	public static String singleReportMessage() {
+	public String singleReportMessage() {
 		return "An incident has been reported.";
 	}
 
-	public static String moreThanOneReportMessage() {
+	public String moreThanOneReportMessage() {
 		return "More than 1 incident has been reported.";
 	}
 }

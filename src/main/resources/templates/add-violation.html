@@ -62,7 +62,7 @@
 			
 			<div class="form-group">
 				<label for="location" class="label-input control-label">Location of Violation<span class="required">*</span></label>
-				<input id="location" type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" onFocus="geolocate()"> 
+				<input id="addViolationlocation" type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" onFocus="geolocate()"> 
 			</div>
 				
 			<style>
@@ -119,14 +119,14 @@
 			</div>
 			
 			<div class="col-md-12" style="margin-bottom: 2em;">
-				<table width="50%">
+				<table width="50%" onclick="removeElement()">
 		            <thead>
 		                <tr>
 		                </tr>
 		            </thead>
 		            <tbody class="violator-tbody-names">
 		            	<tr th:each="violator: ${violation.violators}">
-						    <td th:text="${violator.lastName + ', ' + violator.firstName}" />
+						    <td  th:text="${violator.lastName + ', ' + violator.firstName}" />
 						    <td><i class="fas fa-minus"></i></td>
 						</tr>
 		            </tbody>
@@ -149,10 +149,10 @@
 				<table width="50%">
 		            <thead>
 		            </thead>
-		            <tbody class="vessel-tbody-names">
-		            	<tr th:each="vessel: ${violation.vessels}">
+		            <tbody class="vessel-tbody-names" >
+		            	<tr th:each="vessel: ${violation.vessels}" th:onclick="trclick()">
 						    <td th:text="${vessel.vesselName}" />
-						    <td><i class="fas fa-minus"></i></td>
+						    <td th:onclick="tdclick(this);"><i class="fas fa-minus" ></i></td>
 						</tr>
 		            </tbody>
 	        	</table>
@@ -248,7 +248,7 @@ const componentForm = {
 		
 function initializeLocation() {
 	  
-	  autocomplete = new google.maps.places.Autocomplete((document.getElementById('location')));
+	  autocomplete = new google.maps.places.Autocomplete((document.getElementById('addViolationlocation')));
 	  
 	  autocomplete.setComponentRestrictions({
 		  country: ["ph"]
