@@ -8,7 +8,7 @@ The application is deployed in cloud and can be accessed by the link below:
 [http://vesselreportingtrackingsystem-env.eba-i2a8ukb5.ap-southeast-1.elasticbeanstalk.com/](http://vesselreportingtrackingsystem-env.eba-i2a8ukb5.ap-southeast-1.elasticbeanstalk.com/)
 
 
-## Feature
+## Features
 * Consume the user submitted report from [OReport](https://github.com/rjtmahinay/illegal-fishing-report-mobile)
 * Add, update and show information about the reports, violators, vessels and violations
 * Statistics of violations and reports in a specified year
