@@ -18,7 +18,8 @@ The application is deployed in cloud and can be accessed by the link below:
 * Scalability as it is managed by cloud platform
 
 ## Detailed Information
-[Documentation](https://github.com/rjtmahinay/vessel-reporting/blob/master/details/README.md) - Consist of user interfaces and explanation of the application
+* [Documentation](https://github.com/rjtmahinay/vessel-reporting/blob/master/details/README.md) - Consist of user interfaces and explanation of the application
+* [Powerpoint](https://1drv.ms/p/s!ApZExzU1v69ym0jVJOq3lIMn26ni?e=rpaeEJ)
 
 ## License
 License under this hackathon
