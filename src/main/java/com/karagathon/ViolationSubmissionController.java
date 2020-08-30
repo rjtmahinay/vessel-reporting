@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,6 +73,14 @@ public class ViolationSubmissionController {
 	@Value("${aws.s3.violation.bucket}")
 	String bucketName;
 
+	@ModelAttribute("loggedInUser")
+	public void userAttribute(Model model) {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		model.addAttribute("loggedInUser", name);
+
+	}
+
 	@RequestMapping("/violations")
 	public String dashboard(Model model) {
 		List<Violation> violations = violationService.getAllViolations();
@@ -82,7 +91,7 @@ public class ViolationSubmissionController {
 	@GetMapping("/search-violation")
 	public ModelAndView searchViolation(@RequestParam("keyword") String title) {
 
-		if (Objects.isNull(title) || title.isEmpty()) {
+		if (Objects.isNull(title) || title.trim().isEmpty()) {
 			return new ModelAndView("redirect:/violations");
 		}
 		ModelAndView mav = new ModelAndView();
@@ -130,7 +139,7 @@ public class ViolationSubmissionController {
 		if (!Objects.isNull(removedMediaIds) && !removedMediaIds.isEmpty()) {
 			removedMediaIds.forEach(mediumId -> mediaService.deleteMedium(Long.parseLong(mediumId)));
 		}
-		return "redirect:/add-violation";
+		return "redirect:/violation/".concat(savedViolation.getId().toString());
 	}
 
 	@GetMapping("/violation/image/{id}")

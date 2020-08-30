@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,125 +40,135 @@ import com.karagathon.service.ViolatorService;
 
 @Controller
 public class ViolatorSubmissionController {
-	
+
 	@Autowired
 	ViolatorService violatorService;
-	
+
 	@Autowired
 	MediaService mediaService;
-	
+
 	@Autowired
 	FileHelper fileHelper;
-	
+
 	@Autowired
 	AWSS3Service s3Service;
-	
+
 	@Autowired
 	VesselService vesselService;
-	
+
 	@Autowired
 	SpecificServiceHelper serviceHelper;
-	
+
 	@Value("${violation.file.path}")
 	String destination;
-	
+
 	@Value("${aws.s3.violator.filePath}")
 	String filePath;
-	
+
 	@Value("${aws.s3.violation.bucket}")
 	String bucketName;
-	
+
+	@ModelAttribute("loggedInUser")
+	public void userAttribute(Model model) {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		model.addAttribute("loggedInUser", name);
+
+	}
+
 	@RequestMapping("/violators")
 	public String dashboard(Model model) {
 		List<Violator> violators = violatorService.getAllViolators();
 		model.addAttribute("violators", violators);
-		
-		violators.forEach(System.out::println);
-		
+
 		return "violator-dashboard.html";
 	}
-	
-	@GetMapping("/search-violator")
-	public ModelAndView searchViolator( @RequestParam("keyword") String name ) {
 
-		if( Objects.isNull(name) || name.trim().isEmpty()) {
-			return new ModelAndView( "redirect:/violators" );
+	@GetMapping("/search-violator")
+	public ModelAndView searchViolator(@RequestParam("keyword") String name) {
+
+		if (Objects.isNull(name) || name.trim().isEmpty()) {
+			return new ModelAndView("redirect:/violators");
 		}
-		
+
 		ModelAndView mav = new ModelAndView();
 		List<Violator> violators = violatorService.findViolatorsByName(name);
 		mav.addObject("keyword", name);
 		mav.addObject("violators", violators);
 		mav.setViewName("violator-dashboard.html");
-		
+
 		return mav;
 	}
-	
+
 	@RequestMapping("/add-violator")
 	public String addViolator(Model model) {
-		
+
 		model.addAttribute("violator", new Violator());
-		
+
 		return "add-violator.html";
 	}
-	
+
 	@GetMapping("/violator/{id}")
 	public ModelAndView getSpecificViolator(@PathVariable("id") Long id) {
-		
+
 		List<Vessel> vesselsOwned = vesselService.findVesselsOwnedByViolator(violatorService.findById(id));
 		ModelAndView mav = serviceHelper.getSpecific(violatorService, id);
 		Violator violator = violatorService.findById(id);
 		boolean isOwner = false;
-		if( !vesselsOwned.isEmpty() ) {
+		if (!vesselsOwned.isEmpty()) {
 			isOwner = true;
 			mav.addObject("vessels", vesselsOwned);
 		}
-		
+
 		mav.addObject("isOwner", isOwner);
-		mav.addObject("age", Utilities.calculateAge(violator.getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()));
+		mav.addObject("age", Utilities.calculateAge(
+				violator.getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()));
 		return mav;
 	}
-	
+
 	@PostMapping("/submit-violator")
-	public String saveViolator(@ModelAttribute("violator") Violator violator, @RequestParam(value="files", required=false) List<MultipartFile> files, 
-			@RequestParam(value="media_id[]", required=false) List<String> removedMediaIds) {
-		
+	public String saveViolator(@ModelAttribute("violator") Violator violator,
+			@RequestParam(value = "files", required = false) List<MultipartFile> files,
+			@RequestParam(value = "media_id[]", required = false) List<String> removedMediaIds) {
+
+		System.out.println("violator: " + violator);
 		Violator savedViolator = violatorService.saveAndFlush(violator);
-		
-		mediaService.saveAll( ListConversionHelper.stringToMedia( fileHelper.uploadMultipleFiles(files, new BucketBeanHelper(bucketName, filePath) ), savedViolator ) );
-		
-		if( !Objects.isNull(removedMediaIds) && !removedMediaIds.isEmpty() ) {	
-			removedMediaIds.forEach( mediumId -> mediaService.deleteMedium( Long.parseLong(mediumId) ) );
+
+		mediaService.saveAll(ListConversionHelper.stringToMedia(
+				fileHelper.uploadMultipleFiles(files, new BucketBeanHelper(bucketName, filePath)), savedViolator));
+
+		if (!Objects.isNull(removedMediaIds) && !removedMediaIds.isEmpty()) {
+			removedMediaIds.forEach(mediumId -> mediaService.deleteMedium(Long.parseLong(mediumId)));
 		}
-		
+
 		System.out.println("new violator: " + savedViolator);
-		
-		return "redirect:/add-violator";
+
+		return "redirect:/violator/".concat(savedViolator.getId().toString());
 	}
-	
+
 	@GetMapping("/violator/image/{id}")
 	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
-		response.setContentType("image/jfif"); 
+		response.setContentType("image/jfif");
 		Media medium = mediaService.findById(id);
 
-		if( !Objects.isNull(medium) ) {
-			InputStream is = new ByteArrayInputStream( s3Service.downloadFile( medium.getMediaFilePath(), new BucketBeanHelper(bucketName, filePath) ) );
+		if (!Objects.isNull(medium)) {
+			InputStream is = new ByteArrayInputStream(
+					s3Service.downloadFile(medium.getMediaFilePath(), new BucketBeanHelper(bucketName, filePath)));
 			IOUtils.copy(is, response.getOutputStream());
 		}
 	}
-	
+
 	@GetMapping("/edit/violator/{id}")
 	public String updateViolation(Model model, @PathVariable("id") Long id) {
 		Violator violator = violatorService.findById(id);
 		List<Media> media = mediaService.findMediaByViolator(violator);
-		
+
 		model.addAttribute("violator", violator);
 		model.addAttribute("media", media);
 		model.addAttribute("update", true);
 		return "add-violator.html";
 	}
 
-	
 //	@PostMapping("/add-violator")
 //	@ResponseBody
 //	public Long addViolator(@RequestBody Violator violator) {
@@ -181,5 +192,5 @@ public class ViolatorSubmissionController {
 //	{  
 //		violatorService.delete(violatorId);
 //	}  
-	
+
 }

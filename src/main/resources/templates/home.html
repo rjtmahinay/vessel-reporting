@@ -3,194 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<!-- CSS only -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<!-- JS, Popper.js, and jQuery -->
-<script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    
-   <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-   
-   <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
-   <link th:href="@{/css/style3.css}" rel="stylesheet" />
-
-   	<!-- jQuery Custom Scroller CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-    
+<header th:insert="fragments/libs.html :: header"> </header>
+   <link th:href="@{/css/cards.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/highcharts/highcharts.js}" ></script>
     
-    
-
-<title>Report</title>
-
+    <script type="text/javascript" th:src="@{/js/cards.js}"></script>
+<title>Homepage</title>
 </head>
 <body>
+	<div th:replace="fragments/chart-libs.html :: chart-libs"></div>
+	<div th:replace="fragments/nav.html :: nav-fragment"></div>        
+       
+       <div th:replace="fragments/chart.html :: chart-fragment" ></div>
 
-	<nav id="sidebar">
-        <div id="dismiss">
-            <i class="fas fa-arrow-left"></i>
-        </div>
-
-        <div class="sidebar-header">
-            <br>
-            <h6><span th:text="${user.name}"></span></h6>
-        </div>
-
-        <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
-            </li>
-            <li >
-                <a href="/reports">Reports</a>
-            </li>
-            <li>
-                <a href="/violations">Violations</a>
-            </li>
-            <li>
-                <a href="/violators">Violators</a>
-            </li>
-            <li>
-                <a href="/vessels">Vessels</a>
-            </li>
-            <li>
-                <a href="/map">Map</a>
-            </li>
-            <li>
-                <a href="/logout">Log Out</a>
-            </li>
-        </ul>
-    </nav>
-    
-    <div class="content">
-        <nav class="navbar">
-            <div class="">
-
-                <button type="button" id="sidebarCollapse" style="background-color: #fffff;" class="btn btn-info">
-
-                    <i class="fas fa-align-justify"></i>
-                    <span></span>
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
-                							aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-align-justify"></i>
-                </button>
-
-            </div>
-
-            <div class="col-md-8" >
-                <font color="white">
-                    <h2 >OBytes Vessel Reporting and Tracking System</h2>
-                </font>
-            </div>
-            
-
-            <div class="col-m-4">
-            	<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-						<a class="nav-link nav-color dropdown-toggle nav-notif" data-toggle="dropdown">
-						<font color="red">
-							<span class="badge badge-pill badge-danger count" style="border-radius:10px;"></span>
-						</font> 
-							<span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span>Notification</a>
-						<ul class="dropdown-menu" id="notification"></ul>
-					</li>
-				</ul>
-            </div>
-            
-        	
-        </nav>
-        
-        <div class="container">
-        	<h1>TEST LORUM IPSUM</h1>
-        </div>
-
-
-        
-        
-        <div class="row">
-        	<div class="col-md-4">
-        	</div>
-        	
-        	<div class="col-md-8">
-        		<span><h4>Test Notifications</h4></span>
-        		<ul class="" id="notification_result"></ul>
-        	</div>
-        </div>
-        
-        <div id="container" style="height: 400px;"></div>
-        
-       </div> 
-    
-
+       <div th:replace="fragments/cards.html :: cards-fragment" ></div>
+  		
+  		<div class="col-md-8"></div>
+	<footer th:replace="fragments/footer.html :: footer"></footer>
 </body>
 
-<script type="text/javascript" th:src="@{/js/sidebar.js}" ></script>
 
+<script type="text/javascript" th:src="@{/js/chart.js}" ></script>
+<script type="text/javascript" th:src="@{/js/notif.js}" ></script>
 <script>
-			$(document).ready(function(){
- 
-				function load_unseen_notification(view = '')
-				{
-					$.ajax({
-						url:"/fetch-report-records",
-						method:"POST",
-						data:{view:view},
-						success:function(data)
-						{
-							// console.log("data: " + data);
-
-							// console.log(data);
-
-							//var result = JSON.parse(data);
-							//alert(result);
-
-							 /*console.log("notification: " + result.notification);
-							 console.log('unseen: ' + result.unseen_notification);
-
-							$('#notification').html(result.notification);
-							if(result.unseen_notification > 0)
-							{
-								$('.count').html(result.unseen_notification);
-							} */
-							
-							console.log(data);
-							
-							// test
-
-							$('#notification').html(data);
-						},
-						error:function(req, status, error)
-						{
-							console.log("req: " + req);
-							console.log("status: " + status);
-							console.log("error: " + error);
-						}
-					});
-				}
-
-
-				load_unseen_notification();
-
-
-				/* $(document).on('click', '.dropdown-toggle', function(){
-					$('.count').html('');
-					load_unseen_notification('yes');
-				}); */
- 
-				/* setInterval(function(){ 
-					load_unseen_notification();
-				}, 5000);  */
-
-				
-			});
-	
-		</script>
+</script>
 
 
 

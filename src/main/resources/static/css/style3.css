@@ -38,7 +38,7 @@
         outline: none !important;
         border: none;
     }
-
+    
     .line {
         width: 100%;
         height: 1px;
@@ -47,23 +47,24 @@
     }
 
     .btn-info {
+    	margin-right: 70px;
         background-color: #3399ff;
-        border-color: #3399ff;
+        border-color: #fff;
     }
 
     .btn-focus {
-        background-color: #3399ff;
+        background-color: #3399ff !important;
         border-color: #3399ff;
     }
 
     .btn-info:hover{
         background-color: #fff;
-        color: #8c4646;
+        color: #3399ff;
     }
 
     .btn-info:active{
-        background-color: #8c4646 !important;
-        border-color: #8c4646 !important;
+        background-color: #3399ff !important;
+        border-color: #3399ff !important;
     }
 
     
@@ -155,7 +156,7 @@
     #sidebar ul li.active>a,
     a[aria-expanded="true"] {
         color: #fff;
-        background: #663333;
+        background: #8c4646;
     }
 
     a[data-toggle="collapse"] {
@@ -166,8 +167,7 @@
         display: block;
         position: absolute;
         top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
+        right: -10px;
     }
 
     ul ul a {
@@ -204,14 +204,14 @@
     ----------------------------------------------------- */
 
     #content {
-/*        width: 100%;
+       width: 100%;
         margin-left: 2em;
         padding: 20px;
         min-height: 100vh;
         transition: all 0.3s;
         position: absolute;
         top: 0;
-        right: 0;*/
+        right: 0;
     }
 
     /* Style the list */

@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://wwww.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1"/>
-<title>Violator </title>
-	<!-- CSS only -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<!-- JS, Popper.js, and jQuery -->
-<script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
-<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<header th:insert="fragments/libs.html :: header"> </header>
 
 <script type="text/javascript" th:src="@{/js/others.js}" ></script>
+<title>Violator </title>
 <style>
 		.row {
 	  display: flex;
@@ -70,6 +59,7 @@
 
 </head>
 <body>
+<div th:replace="fragments/nav.html :: nav-fragment"></div>      
 	<div class="container">
 		<h2>Violator <span th:text="'#' + ${violator.id}"></span></h2>
 		<hr>
@@ -149,7 +139,7 @@
 						   <div class="card-body">
 							   	<ul th:each="violation : ${violator.violations}">
 									<li>
-										<a th:href="@{/violation/{id}(id=${violation.id})}"  th:text="${violation.title}" ></a>
+										<a th:href="@{/violation/{id}(id=${violation.id})}"  class="btn btn-link"  th:text="${violation.title}" ></a>
 									</li>
 								</ul>
 						   </div>
@@ -164,7 +154,7 @@
 								<h5>Vessels Owned</h5>
 							</div>
 							<div class="col-md-1">
-								<a id="dropdown-link-vessel" href="" data-toggle="collapse" data-target="#vessel-body" ><i id="dropdown-caret-vessel" class="fas fa-caret-square-down"></i></a>
+								<a id="dropdown-link-vessel" href=""  data-toggle="collapse" data-target="#vessel-body" ><i  id="dropdown-caret-vessel" class="fas fa-caret-square-down"></i></a>
 							</div>
 						</div>
 					</div>
@@ -172,7 +162,7 @@
 						   <div class="card-body">
 							   	<ul th:each="vessel : ${vessels}">
 									<li>
-										<a th:href="@{/vessel/{id}(id=${vessel.id})}"  th:text="${vessel.vesselName}" ></a>
+										<a th:href="@{/vessel/{id}(id=${vessel.id})}"  class="btn btn-link"  th:text="${vessel.vesselName}" ></a>
 									</li>
 								</ul>
 						   </div>
@@ -189,12 +179,12 @@
 			      <!--Slides-->
 			      <div class="carousel-inner" role="listbox">
 			        <div class="carousel-item" th:classappend="${mediumIter.index == 0} ? 'active' : '' " th:each="medium,mediumIter : ${media}">
-			          <img class="d-block mx-auto" style="min-width: 50vw; width: 80%; height:60vh;" th:src="@{/violator/image/{id}(id=${medium.id})}" alt="${medium.mediaFilePath}">
+			          <img class="d-block mx-auto" style="min-width: 50vw; width: 80%; height:60vh;" th:src="@{/violator/image/{id}(id=${medium.id})}" alt="No Image">
 			        </div>
 			      </div>		      
 			      <ol class="carousel-indicators">
 			      	<li data-target="#carousel-thumb" th:attr="data-slide-to=${mediumIter.index}" th:classappend="${mediumIter.index == 0} ? 'active' : '' " th:each="medium,mediumIter : ${media}">
-			      		<img class="d-block w-100 d-100 img-fluid"  th:src="@{/violator/image/{id}(id=${medium.id})}" alt="${medium.mediaFilePath}">
+			      		<img class="d-block w-100 d-100 img-fluid"  th:src="@{/violator/image/{id}(id=${medium.id})}" alt="No Image">
 			      	</li>
 			      	 <a class="carousel-control-prev" href="#carousel-thumb" role="button" data-slide="prev">
 			            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -215,5 +205,7 @@
 		</div>
 	
 	</div>
+	<footer th:replace="fragments/footer.html :: footer"></footer>
+	<script type="text/javascript" th:src="@{/js/notif.js}" ></script>
 </body>
 </html>

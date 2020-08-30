@@ -1,0 +1,56 @@
+<div  th:fragment="cards-fragment" class="row mt-4 col-md-12"> 
+      
+      <div class="col-md-1"></div>
+      
+       <div class="col-md-2">
+       	<div class="card" style="width:300px">
+		  <img class="card-img-top" th:src="@{/images/violation.jpg}" style="height:250px;" alt="Card image">
+		  <div class="card-body">
+		    <p class="card-text">Violations that had been recorded.</p>
+		    <a th:href="@{/violations}" class="btn btn-primary stretched-link">Go to Violations</a>
+		  </div>
+		</div>
+       </div>
+       
+       <div class="col-md-2">
+       	<div class="card" style="width:300px">
+		  <img class="card-img-top" th:src="@{/images/people.png}" style="height:250px;" alt="Card image">
+		  <div class="card-body">
+		    <p class="card-text">Persons caught in violations or are owners of a vessel</p>
+		    <a th:href="@{/violators}" class="btn btn-primary stretched-link">Go to Violators</a>
+		  </div>
+		</div>
+       </div>
+       
+       <div class="col-md-2">
+       	<div class="card" style="width:300px">
+		  <img class="card-img-top" th:src="@{/images/vessel2.jfif}" style="height:250px;" alt="Card image">
+		  <div class="card-body">
+		    <p class="card-text">Vessels that had been processed or caught.</p>
+		    <a th:href="@{/vessels}" class="btn btn-primary stretched-link">Go to Vessels</a>
+		  </div>
+		</div>
+       </div>
+       
+       <div class="col-md-2">
+       	<div class="card" style="width:300px">
+		  <img class="card-img-top" th:src="@{/images/report.jpg}" style="height:250px;" alt="Card image">
+		  <div class="card-body">
+		    <p class="card-text">Reports of illegal fishing submitted</p>
+		    <a th:href="@{/reports}" class="btn btn-primary stretched-link">Go to Reports</a>
+		  </div>
+		</div>
+       </div>
+       
+       <div class="col-md-2">
+       	<div class="card" style="width:300px">
+		  <img class="card-img-top" th:src="@{/images/ph-map.png}" style="height:250px;" alt="Card image">
+		  <div class="card-body">
+		    <p class="card-text">Interactive map with submitted reports</p>
+		    <a th:href="@{/map}" target="blank" class="btn btn-primary stretched-link">Go to Map</a>
+		  </div>
+		</div>
+       </div>
+       
+       <div class="col-md-1"></div>
+</div>

@@ -1,0 +1,63 @@
+@charset "ISO-8859-1";
+
+body {
+    margin-bottom: 150px;
+}
+
+/* .btn {
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+} */
+
+.btn-add{
+border: 1px solid black;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color: white;
+  color: black;
+}
+
+.btn-details:hover {
+  background-color: white;
+  color: black;
+}
+
+.btn-success{
+	border: 1px solid black;
+}
+
+.btn-success:hover{
+	background-color: white;
+	color: black;
+}
+
+.temp-span-clickable {
+	cursor: pointer;
+}
+
+.nav-color {
+	color: #fff !important;
+}
+
+.nav-active {
+	color: #D3D3D3 !important;
+}
+
+
+#dropdown-link-vessel {
+	background: white !important; 
+	color: black !important;
+}
+
+#dropdown-link-violator {
+	background: white !important; 
+	color: black !important;
+}

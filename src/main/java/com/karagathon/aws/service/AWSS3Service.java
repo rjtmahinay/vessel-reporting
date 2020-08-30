@@ -34,12 +34,13 @@ public class AWSS3Service {
     @Async
     public String uploadFile(final MultipartFile multipartFile, final BucketBeanHelper bucketBean) {
     	
+    	
     	final StringBuffer filename = new StringBuffer();
     	
         try {
-            final File file = convertMultiPartFileToFile(multipartFile);
-            filename.append( uploadFileToS3Bucket(bucketBean.getBucketName(), file, bucketBean.getObjectFilePath()) ) ;
-            file.delete();  // To remove the file locally created in the project folder.
+    	   final File file = convertMultiPartFileToFile(multipartFile);
+           filename.append( uploadFileToS3Bucket(bucketBean.getBucketName(), file, bucketBean.getObjectFilePath()) ) ;
+           file.delete();  // To remove the file locally created in the project folder.
         } catch (final AmazonServiceException ex) {
         	ex.printStackTrace();
         }
@@ -72,7 +73,6 @@ public class AWSS3Service {
     
     @Async
     public byte[] downloadFile(final String keyName, BucketBeanHelper bucketBean) throws AmazonS3Exception {
-    	System.out.println(bucketBean);
         byte[] content = null;
         final S3Object s3Object = amazonS3.getObject(bucketBean.getBucketName(), bucketBean.getObjectFilePath()+keyName.trim());
         final S3ObjectInputStream stream = s3Object.getObjectContent();
@@ -80,7 +80,7 @@ public class AWSS3Service {
             content = IOUtils.toByteArray(stream);
             s3Object.close();
         } catch(final IOException ex) {
-        	ex.printStackTrace();
+        	System.out.println(ex.getMessage());
         }
         return content;
     }

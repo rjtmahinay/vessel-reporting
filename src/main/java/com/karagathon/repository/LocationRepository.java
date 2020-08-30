@@ -1,6 +1,7 @@
 package com.karagathon.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,5 @@ import com.karagathon.model.Violator;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long> {
 	
-	
+	public Optional<Location> findByReport( Report report );
 }

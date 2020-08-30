@@ -21,21 +21,22 @@ import com.karagathon.aws.service.AWSS3Service;
 
 @Component
 public class FileHelper {
-	
-	
+
 	@Autowired
 	AWSS3Service awsS3Service;
-	
-	
+
 	public List<String> uploadMultipleFiles(List<MultipartFile> files, BucketBeanHelper bucketBean) {
-		
+
 		List<String> filenames = new ArrayList<>();
-		
-		files.forEach( file -> filenames.add( awsS3Service.uploadFile( file, bucketBean ) ) );
-		
+		files.forEach(file -> {
+			if (!file.isEmpty() && !file.getOriginalFilename().trim().isEmpty()) {
+				filenames.add(awsS3Service.uploadFile(file, bucketBean));
+			}
+		});
+
 		return filenames;
 	}
-	
+
 	public List<String> moveUploadedFile(List<MultipartFile> files, String destination) {
 		Path destinationDir = Paths.get(destination);
 
@@ -46,22 +47,23 @@ public class FileHelper {
 				//
 			}
 		}
-		
-		// Start Change - JAng - 08/05/2020 
-		// files.forEach(file -> listFilePaths.add(moveUploadedFile(file, destination)));
-		
+
+		// Start Change - JAng - 08/05/2020
+		// files.forEach(file -> listFilePaths.add(moveUploadedFile(file,
+		// destination)));
+
 		return files.stream().map(file -> moveUploadedFile(file, destination)).collect(Collectors.toList());
-		
+
 		// End Change - JAng - 08/05/2020
 	}
 
 	private String moveUploadedFile(MultipartFile file, String destination) {
-		final StringBuffer renamedFileName = new StringBuffer().append(FileCollisionAvoidanceHelper.getRenamedString( DateFormatter.format( LocalDateTime.now() ) ))
-																.append( FilenameUtils.EXTENSION_SEPARATOR )
-																.append( FilenameUtils.getExtension(file.getOriginalFilename()) );
+		final StringBuffer renamedFileName = new StringBuffer()
+				.append(FileCollisionAvoidanceHelper.getRenamedString(DateFormatter.format(LocalDateTime.now())))
+				.append(FilenameUtils.EXTENSION_SEPARATOR)
+				.append(FilenameUtils.getExtension(file.getOriginalFilename()));
 		final StringBuffer destinationString = new StringBuffer().append(StringUtils.cleanPath(destination))
-															.append(File.separator)
-															.append(renamedFileName);
+				.append(File.separator).append(renamedFileName);
 
 		Path destinationLocation = Paths.get(destinationString.toString());
 
@@ -72,7 +74,7 @@ public class FileHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return renamedFileName.toString();
 	}
 }

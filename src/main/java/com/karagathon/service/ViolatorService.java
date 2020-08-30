@@ -28,7 +28,6 @@ public class ViolatorService implements ApplicationService{
 	}
 	
 	public Violator saveAndFlush(Violator violator) {
-		violator.setId(Long.valueOf(0L));
 		return violatorRepository.saveAndFlush(violator);
 	}
 	

@@ -1,0 +1,9 @@
+@charset "ISO-8859-1";
+
+.leftdivinfo label{
+    float: left;;
+  margin-right: 30px;
+  font-weight: bold;
+  text-align: right;
+  width:30%;
+} 

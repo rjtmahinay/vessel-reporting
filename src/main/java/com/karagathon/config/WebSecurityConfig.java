@@ -24,9 +24,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 
-				.authorizeRequests().antMatchers("/resources/**", "/css/**").permitAll().antMatchers("/images/**")
-				.permitAll().antMatchers("/upload").permitAll().anyRequest().authenticated().and().logout()
-				.logoutUrl("/logout").permitAll().and().formLogin().loginPage("/login").permitAll();
+				.authorizeRequests().
+				antMatchers("/resources/**", "/css/**").
+				permitAll().antMatchers("/images/**")
+				.permitAll().antMatchers("/upload")
+				.permitAll().anyRequest().authenticated()
+				.and()
+				.logout()
+				.logoutUrl("/logout")
+				.permitAll().and().formLogin()
+				.loginPage("/login").permitAll();
 
 	}
 
@@ -42,12 +49,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	private StringBuilder usersQuery() {
-		return new StringBuilder().append("SELECT USER_ID, PASSWORD, ENABLED ").append("FROM ").append("USER ")
+		return new StringBuilder().append("SELECT USER_ID, PASSWORD, ENABLED ").append("FROM ").append("user ")
 				.append("WHERE USER_ID = ?");
 	}
 
 	private StringBuilder authorityQuery() {
-		return new StringBuilder().append("SELECT USER_ID, ROLE ").append("FROM ").append("USER ")
+		return new StringBuilder().append("SELECT USER_ID, ROLE ").append("FROM ").append("user ")
 				.append("WHERE USER_ID = ?");
 	}
 }

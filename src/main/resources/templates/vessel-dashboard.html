@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://wwww.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1"/>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<header th:insert="fragments/libs.html :: header"> </header>
+ <link th:href="@{/css/cards.css}" rel="stylesheet" />
+
 <title>Vessels Dashboard</title>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 
 <br/>
-
+<div th:replace="fragments/nav.html :: nav-fragment"></div>    
 <div class="container">
 	<div class="row mb-4">
-		<div class="col-md-4">
-			<h2>Vessels</h2>
+		<div class="col-md-2">
+			<a th:href="@{/add-vessel}"  class="btn btn-add">Add New Vessel</a>
 		</div>
-		<div class="col-md-8">
+		
+		<div class="col-md-10">
 			<form th:action="@{/search-vessel}" method="GET">
 			    <div class="row">
-			    	<div class="col-md-6">
-				    	<input type="text" class="form-control col-12" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
+			    	<div class="col-md-7">
+				    	<input type="text" class="form-control" name="keyword" id="keyword" size="50" th:value="${keyword}" placeholder="Search" />
 			    	</div>
-			    	<div class="col-md-2">
-			    		<button type="submit" class="btn"><i class="fas fa-search"></i></button>
+			    	<div class="col-md-1">
+			    		<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
 			    	</div>
 			    </div>
 			</form>
@@ -35,14 +40,13 @@
 			    <h4 class="card-title" th:text="${vessel.vesselName}">Card title</h4>
 			    <h6 class="card-subtitle mb-2 text-muted" th:text="${'License Expiry: ' + vessel.licenseExpiry}"></h6>
 			    <p class="card-text" th:text="${vessel.licenseType}"></p>
-			    <a th:href="@{/vessel/{id}(id=${vessel.id})}"  class="btn btn-primary stretched-link"   >Details</a>
+			    <a th:href="@{/vessel/{id}(id=${vessel.id})}"  class="btn btn-primary btn-details stretched-link"   >Details</a>
 		  </div>
 	</div>
-
-
 </div>
 
 
-
+<footer th:replace="fragments/footer.html :: footer"></footer>
+<script type="text/javascript" th:src="@{/js/notif.js}" ></script>
 </body>
 </html>

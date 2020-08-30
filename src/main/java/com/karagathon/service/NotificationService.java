@@ -3,6 +3,9 @@ package com.karagathon.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +23,16 @@ public class NotificationService {
 	}
 	
 	public List<Notification> getNotifications( final int limit ) {
-		return notificationRepository.findAll( Sort.by(Sort.Direction.DESC, "id") );
+		Pageable topLimit = PageRequest.of(0, limit,  Sort.by(Sort.Direction.DESC, "id"));
+		return notificationRepository.findAllByNotificationStatus( false, topLimit );
 	}
 	
 	public List<Notification> getUnseenNotifications( final boolean notificationStatus ){
 		return notificationRepository.findByNotificationStatus(notificationStatus);
 	}
 	
+	public void updateUnseenNotifications() {
+		notificationRepository.updateUnseenNotifications();
+	}
 	
 }

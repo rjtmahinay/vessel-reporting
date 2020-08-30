@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,9 +21,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,8 +69,10 @@ public class VesselReportingController {
 	LocationService locationService;
 
 	@Autowired
-
 	AWSS3Service s3Service;
+
+	@Autowired
+	SMSService smsService;
 
 	@Autowired
 	NotificationService notificationService;
@@ -82,14 +86,14 @@ public class VesselReportingController {
 	@Value("${mobile.android.date.format}")
 	String dateFormatFromMobile;
 
+	@Value("${chart.properties.years.interval}")
+	Integer yearInterval;
+
 	@Autowired
 	ReportService reportService;
 
 	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
-	SMSService smsService;
 
 	@RequestMapping("/login")
 	public String login(Principal principal) {
@@ -104,32 +108,38 @@ public class VesselReportingController {
 	public String home(Model model, Principal principal) {
 		User user = userRepository.getUser(principal.getName());
 
-		model.addAttribute("user", user);
+		// TODO REFACTOR GENERATE YEARS IN FRONT END INSTEAD
+		List<String> years = new ArrayList<>();
+		LocalDate currentDate = LocalDate.now();
+		years.add(String.valueOf(currentDate.getYear()));
+		for (int currentYear = 1; currentYear < yearInterval; currentYear++) {
+			years.add(Integer.toString(currentDate.plusYears(currentYear * -1).getYear()));
+		}
 
+		model.addAttribute("years", years);
+
+		model.addAttribute("user", user);
 		return "home.html";
+	}
+
+	@ModelAttribute("loggedInUser")
+	public void userAttribute(Model model) {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		model.addAttribute("loggedInUser", name);
+
 	}
 
 	@RequestMapping("/reports")
 	public String reportsDashboard(Model model) {
-		List<Report> reports = reportService.getAllReports().stream().map(report -> {
-			String description;
-
-			if (report.getDescription().length() > 99) {
-				description = report.getDescription().substring(0, 99).concat("...");
-			} else {
-				description = report.getDescription();
-			}
-
-			return new Report(report.getId(), report.getName(), report.getMedia(), description);
-		}).collect(Collectors.toList());
+		List<Report> reports = reportService.getAllReports();
 		model.addAttribute("reports", reports);
 
 		return "reports-dashboard.html";
 	}
 
-	@GetMapping("/report/media/{id}")
-	public void showViolationImage(@PathVariable Long id, HttpServletResponse response, Model model)
-			throws IOException {
+	@GetMapping("/report/image/{id}")
+	public void showViolationImage(@PathVariable Long id, HttpServletResponse response) throws IOException {
 		response.setContentType("image/jfif");
 		response.setContentType("video/mp4");
 
@@ -141,7 +151,6 @@ public class VesselReportingController {
 			IOUtils.copy(is, response.getOutputStream());
 
 		}
-
 	}
 
 	@PostMapping("/upload")
@@ -166,20 +175,10 @@ public class VesselReportingController {
 
 		System.out.println(savedReport);
 
-//		Location location = locationService.getLocation( locationString );
-//		
-//		if(Objects.nonNull(location)) {
-//			location.setReport( savedReport );
-//			
-//			Location updatedSavedLocation = locationService.saveAndFlushLocation( location );
-//			
-//			System.out.println(updatedSavedLocation);
-//		}
-
 		Notification savedNotification = notificationService
-				.saveAndFlush(new Notification(false, "New Report Reported! Report #" + savedReport.getId().toString(),
+				.saveAndFlush(new Notification(false, "New Report #" + savedReport.getId().toString() + "!",
 						savedReport.getDescription(), "/report/".concat(savedReport.getId().toString())));
-		System.out.println(savedNotification);
+		System.out.println("NEW NOTIFICATION: " + savedNotification);
 
 		// add sms logic
 		ZoneId defaultZoneId = ZoneId.systemDefault();
@@ -203,11 +202,11 @@ public class VesselReportingController {
 	public ModelAndView getSpecificReport(@PathVariable("id") Long id) {
 
 		ModelAndView mav = serviceHelper.getSpecific(reportService, id);
-
 		IModel model = reportService.findById(id);
-
+		Location location = locationService.getLocationFromReport((Report) model);
 		List<Media> media = mediaService.findMediaByModel(model);
 
+		System.out.println("MEDIA SERVICE: " + media);
 		media.stream().distinct().forEach(medium -> {
 			boolean isVideo = false;
 			boolean isImage = false;
@@ -223,6 +222,11 @@ public class VesselReportingController {
 			}
 		});
 
+		if (Objects.nonNull(location)) {
+			mav.addObject("longitude", location.getLongitude());
+			mav.addObject("latitude", location.getLatitude());
+		}
+
 		return mav;
 	}
 
@@ -233,12 +237,6 @@ public class VesselReportingController {
 		model.addAttribute("locations", locations);
 
 		return "map.html";
-	}
-
-	@GetMapping("/consume/{locationString}")
-	public @ResponseBody String consume(@PathVariable("locationString") String locationString) {
-		System.out.println(locationService.getLocation(locationString));
-		return "";
 	}
 
 	@GetMapping("/search-report")

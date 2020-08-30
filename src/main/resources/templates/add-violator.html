@@ -6,35 +6,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
-    crossorigin="anonymous">
-    
-    <link th:href="@{/css/image.css}" rel="stylesheet" />
-    
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script type="text/javascript" th:src="@{/js/bootstrap-filestyle.min.js}" ></script>
-	
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0joOztOvXtS7zlJo-Cmkq_R0yGyFDCqQ&libraries=places"></script>
+	<header th:insert="fragments/libs.html :: header"> </header>
 	
 	<title>Add Violator</title>
 </head>
-<body onload="initializeLocation()">
-	
+<body>
+	<div th:replace="fragments/nav.html :: nav-fragment"></div>  
 	<div class="container">
-
-		<h3 th:if="${update}">Edit Violator</h3>
-		<h3 th:unless="${update}">Add Violator</h3>
-		<hr>
 	
 		<p class="h4 mb-4" th:if="${update}">Edit Violator</p>
 		<p class="h4 mb-4" th:unless="${update}">Add Violator</p>
-
+		<hr>
 	
 		<form action="#" th:action="@{/submit-violator}" th:object="${violator}"
 			method="POST" enctype="multipart/form-data">
+			
+			<input type="hidden" name="violator_id" th:field="*{id}" /> 
 			
 			<div class="form-group row">
 				<div class="col-md-6">
@@ -69,21 +56,16 @@
 				
 				<div class="col-md-6">
 					<label for="weight" class="label-input control-label">Weight (kg)</label>
-					<input id="weight" type="number" th:field="*{height}" class="form-control" step="0.01" min="1" max="1000" value="1" placeholder="Weight in kg"> 
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<div class="">
-					<label for="address" class="label-input  control-label">Address</label>
-					<input id="address" type="text"  class="form-control" placeholder="Enter address" onFocus="geolocate()">
+					<input id="weight" type="number" th:field="*{weight}" class="form-control" step="0.01" min="1" max="1000" value="1" placeholder="Weight in kg"> 
 				</div>
 			</div>
 			
 			 <div class="form-group">
-			 	<div class="row-4 mb-4">
+			 	<div class="row-4 mb-4"> 
+			 		
 					<!-- <input type="file" name="files" multiple >			 -->
 					<label for="files" class="label-input  control-label">Photos/Videos <span class="required">*</span></label>
+					<span th:if="${update}" th:text="${'(Choose to add more files)'}"></span>
 					<input id="files" type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
 				</div> 
 			 </div>
@@ -113,47 +95,12 @@
 		</form>
 	
 		<hr>
+		
+		
 	</div>
 	
+	<footer th:replace="fragments/footer.html :: footer"></footer>
 	<script type="text/javascript" th:src="@{/js/image.js}" ></script>
-
+	<script type="text/javascript" th:src="@{/js/notif.js}" ></script>
 </body>
-
-<script>
-var autocomplete;
-const componentForm = {
-		  location:"long_name"
-};
-		
-function initializeLocation() {
-	  
-	  autocomplete = new google.maps.places.Autocomplete((document.getElementById('address')));
-	  
-	  autocomplete.setComponentRestrictions({
-		  country: ["ph"]
-	  });
-	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      });
-	 
-	}
-
-// Function of geolocate from Google Places API documentation
-function geolocate() {
-	  if (navigator.geolocation) {
-	    navigator.geolocation.getCurrentPosition(position => {
-	      const geolocation = {
-	        lat: position.coords.latitude,
-	        lng: position.coords.longitude
-	      };
-	      console.log("Geolocation Lat: " + position.coords.latitude);
-	      console.log("Geolocation Long: " + position.coords.longitude);
-	      const circle = new google.maps.Circle({
-	        center: geolocation,
-	        radius: position.coords.accuracy
-	      });
-	      autocomplete.setBounds(circle.getBounds());
-	    });
-	  }
-	}
-</script>
 </html>

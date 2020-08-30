@@ -4,41 +4,19 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    	<!-- CSS only -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
-	<!-- JS, Popper.js, and jQuery -->
-	<script
-	  src="https://code.jquery.com/jquery-3.5.1.js"
-	  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-	  crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    
-	<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-    
-    <link th:href="@{/css/image.css}" rel="stylesheet" />
-    
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script type="text/javascript" th:src="@{/js/bootstrap-filestyle.min.js}" ></script>
-	
+	<header th:insert="fragments/libs.html :: header"> </header>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0joOztOvXtS7zlJo-Cmkq_R0yGyFDCqQ&libraries=places"></script>
-	
 	<title>Add Violation</title>
 </head>
-<body onload="initializeLocation()">
-
+<body onload="initializeLocation();">
+<div th:replace="fragments/nav.html :: nav-fragment"></div>   
 	<div class="container">
-
-		<h3 th:if="${update}">Edit Violation</h3>
-		<h3 th:unless="${update}">Add Violation</h3>
-		<hr>
-	
+		   
 		<p class="h4 mb-4" th:if="${update}">Edit Violation</p>
 		<p class="h4 mb-4" th:unless="${update}">Add Violation</p>
+		<hr>
 		
 		<form action="#" th:action="@{/submit-violation}" th:object="${violation}"
 			method="POST" enctype="multipart/form-data">
@@ -61,8 +39,8 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="location" class="label-input control-label">Location of Violation<span class="required">*</span></label>
-				<input id="addViolationlocation" type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" onFocus="geolocate()"> 
+				<label for="addViolationlocation" class="label-input control-label">Location of Violation<span class="required">*</span></label>
+				<input onfocus="geolocate();" id="addViolationlocation"  type="text" th:field="*{location}" class="form-control mb-4 col-8" placeholder="Type your location" > 
 			</div>
 				
 			<style>
@@ -119,15 +97,15 @@
 			</div>
 			
 			<div class="col-md-12" style="margin-bottom: 2em;">
-				<table width="50%" onclick="removeElement()">
+				<table width="50%">
 		            <thead>
 		                <tr>
 		                </tr>
 		            </thead>
 		            <tbody class="violator-tbody-names">
-		            	<tr th:each="violator: ${violation.violators}">
+		            	<tr th:id="${'violator_tr_' + violator.id}" th:each="violator: ${violation.violators}">
 						    <td  th:text="${violator.lastName + ', ' + violator.firstName}" />
-						    <td><i class="fas fa-minus"></i></td>
+						    <td><span class="temp-span-clickable" onclick="deleteViolatorTRTag(this);" th:attr="data-id=${violator.id}"><i class="fas fa-minus"></i></span></td>
 						</tr>
 		            </tbody>
 	        	</table>
@@ -149,10 +127,10 @@
 				<table width="50%">
 		            <thead>
 		            </thead>
-		            <tbody class="vessel-tbody-names" >
-		            	<tr th:each="vessel: ${violation.vessels}" th:onclick="trclick()">
+		            <tbody class="vessel-tbody-names">
+		            	<tr th:id="${'vessel_tr_' + vessel.id}" th:each="vessel: ${violation.vessels}">
 						    <td th:text="${vessel.vesselName}" />
-						    <td th:onclick="tdclick(this);"><i class="fas fa-minus" ></i></td>
+						    <td><span class="temp-span-clickable" onclick="deleteVesselTRTag(this);" th:attr="data-id=${vessel.id}"><i class="fas fa-minus"></i></span></td>
 						</tr>
 		            </tbody>
 	        	</table>
@@ -162,6 +140,7 @@
 			 	<div class="row-4 mb-4">
 					<!-- <input type="file" name="files" multiple >			 -->
 					<label for="files" class="label-input  control-label">Images/Videos <span class="required">*</span></label>
+					<span th:if="${update}" th:text="${'(Choose to add more files)'}"></span>
 					<input id="files" type="file" name="files" class="filestyle" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Add File" multiple>
 				</div> 
 			 </div>
@@ -183,14 +162,14 @@
 			<br>
 			
 			<div class="col-md-8 violator-inputs mb-2">
-				<div th:each="violator: ${violation.violators}">
-					<input type="hidden" class="form-control" name="violator_id[]" id="violator_id" th:value="${violator.id}">
+				<div th:id="${'violator_input_div_' + violator.id}" th:each="violator: ${violation.violators}">
+					<input  type="hidden" class="form-control" name="violator_id[]" id="violator_id" th:value="${violator.id}">
 				</div>
 			</div>
 			
 			<div class="col-md-8 vessel-inputs mb-2">
-				<div th:each="vessel: ${violation.vessels}">
-					<input type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" th:value="${vessel.id}">
+				<div th:id="${'vessel_input_div_' + vessel.id}" th:each="vessel: ${violation.vessels}">
+					<input  type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" th:value="${vessel.id}">
 				</div>
 			</div>
 			
@@ -207,13 +186,50 @@
 		<hr>
 		
 		<script>
+		var autocomplete;
+		const componentForm = {
+				  location:"long_name"
+		};
+				
+		function initializeLocation() {
+			  
+			  autocomplete = new google.maps.places.Autocomplete((document.getElementById('addViolationlocation')));
+			  
+			  autocomplete.setComponentRestrictions({
+				  country: ["ph"]
+			  });
+			  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		      });
+			 
+			}
+
+		// Function of geolocate from Google Places API documentation
+		function geolocate() {
+			  if (navigator.geolocation) {
+			    navigator.geolocation.getCurrentPosition(position => {
+			      const geolocation = {
+			        lat: position.coords.latitude,
+			        lng: position.coords.longitude
+			      };
+			      console.log("Geolocation Lat: " + position.coords.latitude);
+			      console.log("Geolocation Long: " + position.coords.longitude);
+			      const circle = new google.maps.Circle({
+			        center: geolocation,
+			        radius: position.coords.accuracy
+			      });
+			      autocomplete.setBounds(circle.getBounds());
+			    });
+			  }
+			}
+		
 			$( ".btn-add-violator" ).click(function() {
 				var violatorName = $("#violatorsAC").val();
 				if(violatorName) {
+					var name = '<tr id="violator_tr_'+ violatorId +'"><td>' + violatorName + 
+					'</td><td><span class="temp-span-clickable" onclick="deleteViolatorTRTag(this);" data-id="'+ violatorId +'"><i class="fas fa-minus"></i></span></td></tr>';
 					
-					var name = '<tr><td>' + violatorName + '</td><td><i class="fas fa-minus"></i></td></tr>';
 					$(".violator-tbody-names").append(name);
-					$('.violator-inputs').append('<div><input type="hidden" class="form-control" name="violator_id[]" id="violator_id" value="' + violatorId +'"></div>');
+					$('.violator-inputs').append('<div id="violator_input_div_'+violatorId+'"><input type="hidden" class="form-control" name="violator_id[]" id="violator_id" value="' + violatorId +'"></div>');
 					
 					// cleanup
 					$("#violatorsAC").val('');
@@ -224,58 +240,37 @@
 			$( ".btn-add-vessel" ).click(function() {
 				var vesselName = $("#vesselsAC").val();
 				if(vesselName) {
-					
-					var name = '<tr><td>' + vesselName + '</td><td><i class="fas fa-minus"></i></td></tr>';
+					var name = '<tr id="vessel_tr_'+ vesselId +'"><td>' + vesselName + 
+					'</td><td><span class="temp-span-clickable" onclick="deleteVesselTRTag(this);" data-id="'+ vesselId +'"><i class="fas fa-minus"></i></span></td></tr>';;
 					$(".vessel-tbody-names").append(name);
-					$('.vessel-inputs').append('<div><input type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" value="' + vesselId +'"></div>');
+					$('.vessel-inputs').append('<div id="vessel_input_div_'+vesselId+'"><input type="hidden" class="form-control" name="vessel_id[]" id="vessel_id" value="' + vesselId +'"></div>');
 					
 					// cleanup
-					$("#vesselssAC").val('');
+					$("#vesselsAC").val('');
 					vesselId = '';
 				}
 			});
+			
+			function deleteViolatorTRTag(evt) {
+				var anchorId = $(evt).attr("data-id");
+				var violatorId = anchorId.substring();
+				$('#violator_tr_' + violatorId).remove();
+				$('#violator_input_div_' + violatorId).remove();
+			}
+			
+			function deleteVesselTRTag(evt) {
+				var anchorId = $(evt).attr("data-id");
+				var violatorId = anchorId.substring();
+				$('#vessel_tr_' + violatorId).remove();
+				$('#vessel_input_div_' + violatorId).remove();
+			}
+
+			
 
 		</script>
 		<script type="text/javascript" th:src="@{/js/image.js}" ></script>
+		<script type="text/javascript" th:src="@{/js/notif.js}" ></script>
 	</div>
-
+<footer th:replace="fragments/footer.html :: footer"></footer>
 </body>
-<script>
-var autocomplete;
-const componentForm = {
-		  location:"long_name"
-};
-		
-function initializeLocation() {
-	  
-	  autocomplete = new google.maps.places.Autocomplete((document.getElementById('addViolationlocation')));
-	  
-	  autocomplete.setComponentRestrictions({
-		  country: ["ph"]
-	  });
-	  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      });
-	 
-	}
-
-// Function of geolocate from Google Places API documentation
-function geolocate() {
-	  if (navigator.geolocation) {
-	    navigator.geolocation.getCurrentPosition(position => {
-	      const geolocation = {
-	        lat: position.coords.latitude,
-	        lng: position.coords.longitude
-	      };
-	      console.log("Geolocation Lat: " + position.coords.latitude);
-	      console.log("Geolocation Long: " + position.coords.longitude);
-	      const circle = new google.maps.Circle({
-	        center: geolocation,
-	        radius: position.coords.accuracy
-	      });
-	      autocomplete.setBounds(circle.getBounds());
-	    });
-	  }
-	}
-
-</script>
 </html>

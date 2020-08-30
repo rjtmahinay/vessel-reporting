@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
@@ -18,11 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.karagathon.helper.ListConversionHelper;
 import com.karagathon.helper.LocationParser;
-import com.karagathon.model.IModel;
 import com.karagathon.model.Location;
+import com.karagathon.model.Report;
 import com.karagathon.repository.LocationRepository;
 
 @Service
@@ -76,6 +76,10 @@ public class LocationService implements ApplicationService {
         }
 
 		return location;
+	}
+	
+	public Location getLocationFromReport( final Report report ) {
+		return locationRepository.findByReport(report).orElse(null);
 	}
 
 	
