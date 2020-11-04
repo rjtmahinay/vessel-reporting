@@ -2,13 +2,7 @@
 *An entry for the 1st Karagathon 2020. A web application for keep tracking of user submitted reports of illegal fishing and of violations, violators
 and vessels involve in illegal trade.*
 
-## Details
-The application is deployed in cloud and can be accessed by the below link:
-
-[http://vesselreportingtrackingsystem-env.eba-i2a8ukb5.ap-southeast-1.elasticbeanstalk.com/](http://vesselreportingtrackingsystem-env.eba-i2a8ukb5.ap-southeast-1.elasticbeanstalk.com/)
-
-
-## Feature
+## Features
 * Consume the user submitted report from [OReport](https://github.com/rjtmahinay/illegal-fishing-report-mobile)
 * Add, update and show information about the reports, violators, vessels and violations
 * Statistics of violations and reports in a specified year
@@ -18,7 +12,8 @@ The application is deployed in cloud and can be accessed by the below link:
 * Scalability as it is managed by cloud platform
 
 ## Detailed Information
-[Documentation](https://github.com/rjtmahinay/vessel-reporting/blob/master/details/README.md) - Consist of user interfaces and explanation of the application
+* [Documentation](https://github.com/rjtmahinay/vessel-reporting/blob/master/details/README.md) - Consist of user interfaces and explanation of the application
+* [Powerpoint](https://1drv.ms/p/s!ApZExzU1v69ym0jVJOq3lIMn26ni?e=rpaeEJ)
 
 ## License
 License under this hackathon
