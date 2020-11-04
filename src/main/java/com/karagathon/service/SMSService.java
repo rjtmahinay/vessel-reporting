@@ -31,7 +31,7 @@ public class SMSService {
 		urlParameters.add(new BasicNameValuePair("apikey", SMS_API_KEY));
 		urlParameters.add(new BasicNameValuePair("message", message));
 		// Set the SMS receiver to my phone
-		urlParameters.add(new BasicNameValuePair("number", "09272697150"));
+		urlParameters.add(new BasicNameValuePair("number", ""));
 		urlParameters.add(new BasicNameValuePair("sendername", "OBYTES"));
 
 		try {
